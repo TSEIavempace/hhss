@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Estudio: El Grupo, Psicología y Dinámicas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f6ff',
+                            100: '#e0edff',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            900: '#0f172a',
+                        },
+                        vibrant: {
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            coral: '#f43f5e',
+                            violet: '#8b5cf6',
+                            cyan: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .tab-btn.active {
+            color: #2563eb;
+            border-bottom: 3px solid #2563eb;
+            background-color: #eff6ff;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- TOP READING PROGRESS BAR -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-slate-200 z-50">
+        <div id="progressBar" class="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 w-0 transition-all duration-150"></div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-slate-900 text-white shadow-xl border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo / Title -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('sec1')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                        <i class="fa-solid fa-users-gear text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-heading font-bold text-lg md:text-xl tracking-tight text-white">Psicología & Dinámica de Grupos</h1>
+                        <p class="text-xs text-slate-400 font-medium hidden sm:block">Plataforma Teórico-Práctica Integral</p>
+                    </div>
+                </div>
+
+                <!-- Global Search & Actions -->
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="globalSearch" placeholder="Buscar concepto, rol, autor..." 
+                               onkeyup="filterContent()" 
+                               class="bg-slate-800 text-slate-200 placeholder-slate-400 text-sm rounded-full pl-9 pr-4 py-2 w-40 sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-slate-700 transition-all">
+                    </div>
+
+                    <button onclick="toggleAllAccordions()" title="Expandir/Colapsar todo" class="hidden md:flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-full border border-slate-700 transition-colors">
+                        <i class="fa-solid fa-up-down-left-right"></i>
+                        <span id="toggleAllBtnText">Expandir Todo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB NAVIGATION BAR -->
+            <nav class="flex space-x-1 overflow-x-auto no-scrollbar border-t border-slate-800/80 py-2 scroll-smooth text-sm font-medium">
+                <button onclick="switchTab('sec1')" id="tab-sec1" class="tab-btn active shrink-0 px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-cubes"></i> 1. Concepto & Ciclo
+                </button>
+                <button onclick="switchTab('sec2')" id="tab-sec2" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group"></i> 2. Tipologías
+                </button>
+                <button onclick="switchTab('sec3')" id="tab-sec3" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-crown"></i> 3. Roles & Liderazgo
+                </button>
+                <button onclick="switchTab('sec4')" id="tab-sec4" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-sliders"></i> 4. Dinámicas & Ficha
+                </button>
+                <button onclick="switchTab('sec5')" id="tab-sec5" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project"></i> 5. Sociometría & Role-Playing
+                </button>
+                <button onclick="switchTab('sec6')" id="tab-sec6" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-heart-pulse"></i> 6. Factores Psicosociales
+                </button>
+                <button onclick="switchTab('sec7')" id="tab-sec7" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-briefcase"></i> 7. Equipo & Comunicación
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- SEARCH RESULTS OVERLAY PANEL -->
+    <div id="searchResultsPanel" class="hidden max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-4">
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex justify-between items-center shadow-md">
+            <span id="searchResultCount" class="text-amber-800 text-sm font-semibold"></span>
+            <button onclick="clearSearch()" class="text-amber-800 hover:text-amber-950 text-xs font-bold underline">Limpiar Búsqueda</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ==========================================
+             SECCIÓN 1: CONCEPTO, POTENCIALIDADES Y CICLO VITAL
+             ========================================== -->
+        <section id="sec1" class="tab-content space-y-10">
+            <!-- Hero Title -->
+            <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute right-0 top-0 translate-x-10 -translate-y-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold tracking-wider rounded-full uppercase mb-3">Bloque 1.1 - 1.3</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">El Grupo: Concepto, Límites, Potencialidades y Ciclo Vital</h2>
+                <p class="text-slate-300 max-w-3xl text-base sm:text-lg leading-relaxed">
+                    Estudio integral de la sociabilidad intrínseca humana, requisitos constitutivos del grupo frente a simples agrupaciones, potencialidades de trabajo colectivo según Cembranos & Medina, y fases evolutivas.
+                </p>
+            </div>
+
+            <!-- 1.1 Naturaleza Social y Concepto de Grupo -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold">1.1</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Naturaleza Social Humana y Concepto de Grupo</h3>
+                        <p class="text-sm text-slate-500">Fundamentos ontológicos y delimitación socioestructural</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Sociabilidad Intrínseca -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 hover:border-blue-300 transition-all">
+                        <div class="flex items-center gap-3 mb-3 text-blue-600">
+                            <i class="fa-solid fa-dna text-xl"></i>
+                            <h4 class="font-bold text-slate-900">Sociabilidad Intrínseca</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            El ser humano es sociable por naturaleza y precisa de la sociedad para desarrollarse y madurar íntegramente. A lo largo de su existencia, la persona participa en grupos diversos y heterogéneos (familia, escuela, trabajo, amigos, asociaciones) desempeñando en cada uno diferentes posiciones y papeles.
+                        </p>
+                    </div>
+
+                    <!-- Diferencia Agregación vs Grupo -->
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-5 border border-amber-200">
+                        <div class="flex items-center gap-3 mb-3 text-amber-700">
+                            <i class="fa-solid fa-code-compare text-xl"></i>
+                            <h4 class="font-bold text-slate-900">Diferencia: Agregación vs Grupo</h4>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Un conjunto de personas reunidas casualmente forma solo una <strong class="text-amber-900">agrupación</strong>. Para constituir un <strong class="text-amber-900">grupo</strong>, es indispensable que comiencen a interactuar, generando potencialidades formativas, motivacionales y creativas.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Requisitos Definitorios Accordeon -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden">
+                    <button onclick="toggleAccordion('req-acc')" class="w-full bg-slate-100 hover:bg-slate-200 px-6 py-4 flex justify-between items-center text-left transition-colors">
+                        <span class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-blue-600"></i> Requisitos Definitorios del Grupo (Desplegar)
+                        </span>
+                        <i id="req-acc-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+                    </button>
+                    <div id="req-acc" class="hidden bg-white p-6 border-t border-slate-200 space-y-3 text-sm text-slate-600">
+                        <ul class="space-y-2.5">
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> <div><strong>Conjunto Identificable:</strong> Debe tratarse de un colectivo delimitado de personas.</div></li>
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> <div><strong>Estructura Vivencial Compartida:</strong> Normas internas implícitas (p. ej., saludarse) y normas explícitas o formales (p. ej., resolver discrepancias dialogando).</div></li>
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> <div><strong>Interacción Continua:</strong> Sustentada especialmente en los procesos de comunicación interpersonal.</div></li>
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> <div><strong>Finalidad u Objetivo Compartido:</strong> Metas claras que articulan el esfuerzo colectivo.</div></li>
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> <div><strong>Conciencia de Grupo o Conciencia Colectiva:</strong> Factor distintivo esencial respecto a la simple agregación de individuos.</div></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Definición Froufe & Límites -->
+                <div class="grid md:grid-cols-2 gap-6 pt-2">
+                    <div class="bg-blue-50 border-l-4 border-blue-600 p-5 rounded-r-xl">
+                        <h4 class="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-quote-left text-blue-500"></i> Definición de S. Froufe (1998)
+                        </h4>
+                        <p class="text-sm text-blue-950 italic">
+                            «Conjunto de personas que participan en una misma estructura vivencial colectiva, personas que se comunican entre sí y que tienen un objetivo común». 
+                        </p>
+                        <p class="text-xs text-blue-700 mt-2 font-medium">La interacción genera la asunción de roles, normas de convivencia y lazos de solidaridad y pertenencia.</p>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-xl">
+                        <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-vector-square text-violet-600"></i> Límites y Trascendencia
+                        </h4>
+                        <p class="text-sm text-slate-600">
+                            Las fronteras grupales se trazan por criterios de ubicación geográfica, tradiciones, afinidad política/religiosa, profesión o parentesco. Las entidades grupales organizadas (empresas, partidos, asociaciones) <strong class="text-slate-900">trascienden la vida de sus miembros individuales</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1.2 Potencialidades del Grupo (Cembranos y Medina) -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">1.2</div>
+                        <div>
+                            <h3 class="font-heading text-xl font-bold text-slate-900">Potencialidades del Grupo (Cembranos y Medina)</h3>
+                            <p class="text-sm text-slate-500">Beneficios específicos que el trabajo en grupo genera por encima de lo individual</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-semibold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200 hidden sm:inline-block">5 Flyers Interactivos</span>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Card 1 -->
+                    <div class="group bg-slate-50 hover:bg-emerald-600 hover:text-white p-6 rounded-2xl border border-slate-200 transition-all duration-300 transform hover:-translate-y-1 shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 group-hover:bg-white group-hover:text-emerald-600 flex items-center justify-center text-xl font-bold mb-4 transition-colors">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-900 group-hover:text-white">Pensamiento Grupal</h4>
+                        <p class="text-sm text-slate-600 group-hover:text-emerald-50 leading-relaxed">
+                            Se basa en el principio de que varias mentes organizadas superan holgadamente las limitaciones de la reflexión estrictamente individual.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="group bg-slate-50 hover:bg-emerald-600 hover:text-white p-6 rounded-2xl border border-slate-200 transition-all duration-300 transform hover:-translate-y-1 shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 group-hover:bg-white group-hover:text-emerald-600 flex items-center justify-center text-xl font-bold mb-4 transition-colors">
+                            <i class="fa-solid fa-shuffle"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-900 group-hover:text-white">Aprovechamiento de la Diversidad</h4>
+                        <p class="text-sm text-slate-600 group-hover:text-emerald-50 leading-relaxed">
+                            Integra productivamente la heterogeneidad de destrezas, vivencias, emociones y habilidades previas en vez de segregar por diferencias.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="group bg-slate-50 hover:bg-emerald-600 hover:text-white p-6 rounded-2xl border border-slate-200 transition-all duration-300 transform hover:-translate-y-1 shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 group-hover:bg-white group-hover:text-emerald-600 flex items-center justify-center text-xl font-bold mb-4 transition-colors">
+                            <i class="fa-solid fa-comments text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-900 group-hover:text-white">Aprendizaje de Habilidades Sociales</h4>
+                        <p class="text-sm text-slate-600 group-hover:text-emerald-50 leading-relaxed">
+                            Las situaciones conflictivas se transforman en oportunidades educativas para asimilar convivencia, diálogo, respeto, empatía, asertividad y responsabilidad.
+                        </p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="group bg-slate-50 hover:bg-emerald-600 hover:text-white p-6 rounded-2xl border border-slate-200 transition-all duration-300 transform hover:-translate-y-1 shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 group-hover:bg-white group-hover:text-emerald-600 flex items-center justify-center text-xl font-bold mb-4 transition-colors">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-900 group-hover:text-white">Socialización y Gratificación Cooperativa</h4>
+                        <p class="text-sm text-slate-600 group-hover:text-emerald-50 leading-relaxed">
+                            Enseña el respeto a las normas y transmite el valor del trabajo cooperativo, facilitando el desempeño futuro en otros grupos.
+                        </p>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="group bg-slate-50 hover:bg-emerald-600 hover:text-white p-6 rounded-2xl border border-slate-200 transition-all duration-300 transform hover:-translate-y-1 shadow-sm sm:col-span-2 lg:col-span-1">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 group-hover:bg-white group-hover:text-emerald-600 flex items-center justify-center text-xl font-bold mb-4 transition-colors">
+                            <i class="fa-solid fa-diagram-next"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2 text-slate-900 group-hover:text-white">Estructuración Cognitiva</h4>
+                        <p class="text-sm text-slate-600 group-hover:text-emerald-50 leading-relaxed">
+                            Habitúa a organizar el pensamiento enfocado a metas comunes y requiere el autoconocimiento y la aceptación personal para interactuar con terceros.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1.3 Etapas del Ciclo Vital del Grupo (Timeline) -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-bold">1.3</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Etapas del Ciclo Vital del Grupo</h3>
+                        <p class="text-sm text-slate-500">El grupo como entidad viva a través de sus cuatro fases secuenciales</p>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
+                    <!-- Timeline Step 1 -->
+                    <div class="bg-gradient-to-b from-blue-50 to-white border border-blue-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">1</span>
+                                <i class="fa-solid fa-baby text-blue-500 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-blue-900 text-lg mb-2">1. Nacimiento</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Emerge a partir de una agrupación cuando concurren la interacción efectiva y la existencia explícita de un objetivo común.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Step 2 -->
+                    <div class="bg-gradient-to-b from-purple-50 to-white border border-purple-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-8 h-8 rounded-full bg-purple-600 text-white font-bold text-xs flex items-center justify-center">2</span>
+                                <i class="fa-solid fa-chart-line text-purple-500 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-purple-900 text-lg mb-2">2. Crecimiento</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Se definen las normas grupales, los roles progresivamente y se diferencian las responsabilidades y funciones de cada miembro.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Step 3 -->
+                    <div class="bg-gradient-to-b from-emerald-50 to-white border border-emerald-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">3</span>
+                                <i class="fa-solid fa-certificate text-emerald-500 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-emerald-900 text-lg mb-2">3. Maduración</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Identificación plena con la identidad grupal; la alta cohesión permite alcanzar el rendimiento y productividad óptimos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Step 4 -->
+                    <div class="bg-gradient-to-b from-rose-50 to-white border border-rose-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-8 h-8 rounded-full bg-rose-600 text-white font-bold text-xs flex items-center justify-center">4</span>
+                                <i class="fa-solid fa-flag-checkered text-rose-500 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-rose-900 text-lg mb-2">4. Muerte o Disolución</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Sobreviene al desaparecer la finalidad compartida que unía al colectivo (como la conclusión de un ciclo formativo escolar).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECCIÓN 2: CLASIFICACIÓN Y TIPOLOGÍAS
+             ========================================== -->
+        <section id="sec2" class="tab-content hidden space-y-10">
+            <!-- Hero Title -->
+            <div class="bg-gradient-to-r from-violet-900 via-purple-900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-2xl">
+                <span class="inline-block px-3 py-1 bg-violet-500/20 text-violet-300 text-xs font-bold tracking-wider rounded-full uppercase mb-3">Bloque 2.1 - 2.2</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Criterios de Clasificación y Tipologías Grupales</h2>
+                <p class="text-slate-300 max-w-3xl text-base sm:text-lg">
+                    Taxonomía clásica de Cooley y configuraciones complejas de vinculación afectiva, estructural, cuantitativa y psicosocial.
+                </p>
+            </div>
+
+            <!-- 2.1 Criterios Clásicos de Clasificación -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-violet-100 text-violet-600 flex items-center justify-center text-lg font-bold">2.1</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Criterios Clásicos de Clasificación (Cooley y otros)</h3>
+                        <p class="text-sm text-slate-500">Categorización por afecto, estructura, dimensión y propósito</p>
+                    </div>
+                </div>
+
+                <!-- Accordions for Classical Criteria -->
+                <div class="space-y-4">
+                    <!-- Acc 1: Relación Afectiva -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-afectiva')" class="w-full bg-slate-50 hover:bg-slate-100 px-6 py-4 flex justify-between items-center text-left transition-colors">
+                            <span class="font-bold text-slate-800 flex items-center gap-3">
+                                <i class="fa-solid fa-heart text-rose-500"></i> Por la Relación Afectiva (Primarios vs Secundarios)
+                            </span>
+                            <i id="acc-afectiva-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+                        </button>
+                        <div id="acc-afectiva" class="hidden bg-white p-6 border-t border-slate-200 grid md:grid-cols-2 gap-4 text-sm">
+                            <div class="p-4 bg-rose-50 rounded-xl border border-rose-100">
+                                <h5 class="font-bold text-rose-900 mb-1">Grupos Primarios</h5>
+                                <p class="text-slate-600">Reducido número de integrantes, alta intimidad y primacía de los lazos afectivos (p. ej., la familia o amistades íntimas).</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                <h5 class="font-bold text-slate-900 mb-1">Grupos Secundarios</h5>
+                                <p class="text-slate-600">Relaciones más impersonales, formales y frías; abarcan estructuras más amplias (p. ej., empresas, asociaciones, escuelas).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Acc 2: Por su Estructura -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-estructura')" class="w-full bg-slate-50 hover:bg-slate-100 px-6 py-4 flex justify-between items-center text-left transition-colors">
+                            <span class="font-bold text-slate-800 flex items-center gap-3">
+                                <i class="fa-solid fa-sitemap text-blue-600"></i> Por su Estructura (Formales vs Informales)
+                            </span>
+                            <i id="acc-estructura-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+                        </button>
+                        <div id="acc-estructura" class="hidden bg-white p-6 border-t border-slate-200 grid md:grid-cols-2 gap-4 text-sm">
+                            <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                                <h5 class="font-bold text-blue-900 mb-1">Grupos Formales</h5>
+                                <p class="text-slate-600">Organización reglada y explícita, constituidos para fines y metas impuestas externamente (p. ej., un equipo de trabajo profesional).</p>
+                            </div>
+                            <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                                <h5 class="font-bold text-emerald-900 mb-1">Grupos Informales</h5>
+                                <p class="text-slate-600">Espontáneos, orientados a satisfacer necesidades afectivas, ocio, descanso y amistad mutua.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Acc 3: Por el Número -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-numero')" class="w-full bg-slate-50 hover:bg-slate-100 px-6 py-4 flex justify-between items-center text-left transition-colors">
+                            <span class="font-bold text-slate-800 flex items-center gap-3">
+                                <i class="fa-solid fa-users text-violet-600"></i> Por el Número de Componentes (Pequeños vs Grandes)
+                            </span>
+                            <i id="acc-numero-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+                        </button>
+                        <div id="acc-numero" class="hidden bg-white p-6 border-t border-slate-200 grid md:grid-cols-2 gap-4 text-sm">
+                            <div class="p-4 bg-violet-50 rounded-xl border border-violet-100">
+                                <h5 class="font-bold text-violet-900 mb-1">Grupos Pequeños</h5>
+                                <p class="text-slate-600">Generalmente menos de 12–15 integrantes. Permiten interacción directa cara a cara y comunicación fluida.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                <h5 class="font-bold text-slate-900 mb-1">Grupos Grandes</h5>
+                                <p class="text-slate-600">Superan los 12–15 participantes. Requieren mayor formalización y subestructuras para funcionar.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Acc 4: Por el Objetivo -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-objetivo')" class="w-full bg-slate-50 hover:bg-slate-100 px-6 py-4 flex justify-between items-center text-left transition-colors">
+                            <span class="font-bold text-slate-800 flex items-center gap-3">
+                                <i class="fa-solid fa-bullseye text-amber-600"></i> Por el Objetivo Perseguido
+                            </span>
+                            <i id="acc-objetivo-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+                        </button>
+                        <div id="acc-objetivo" class="hidden bg-white p-6 border-t border-slate-200 grid md:grid-cols-3 gap-4 text-sm">
+                            <div class="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                                <h5 class="font-bold text-amber-900 mb-1">Grupos de Trabajo</h5>
+                                <p class="text-slate-600">La meta se orienta hacia la ejecución de una tarea externa concreta y delimitada.</p>
+                            </div>
+                            <div class="p-4 bg-sky-50 rounded-xl border border-sky-200">
+                                <h5 class="font-bold text-sky-900 mb-1">Grupos de Formación</h5>
+                                <p class="text-slate-600">El propósito radica en la propia dinámica interna, analizando las relaciones y la comunicación interpersonal.</p>
+                            </div>
+                            <div class="p-4 bg-teal-50 rounded-xl border border-teal-200">
+                                <h5 class="font-bold text-teal-900 mb-1">Grupos de Sensibilización</h5>
+                                <p class="text-slate-600">Orientados a la resolución de problemas psicológicos o conflictos específicos (p. ej., grupos de terapia).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2.2 Tipologías Complementarias -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center text-lg font-bold">2.2</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Tipologías Complementarias y Vinculación Individual</h3>
+                        <p class="text-sm text-slate-500">Pertenencia vs Referencia y otras configuraciones sociales</p>
+                    </div>
+                </div>
+
+                <!-- Pertenencia vs Referencia Matrix -->
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-2xl border border-indigo-200">
+                        <div class="flex items-center gap-3 mb-3 text-indigo-700">
+                            <i class="fa-solid fa-id-badge text-2xl"></i>
+                            <h4 class="font-bold text-indigo-950 text-lg">Grupo de Pertenencia</h4>
+                        </div>
+                        <p class="text-sm text-slate-700 mb-4 leading-relaxed">
+                            Vinculación no elegida voluntariamente donde la persona se encuentra integrada por razones objetivas (familia, vecindario, aula escolar).
+                        </p>
+                        <span class="inline-block px-3 py-1 bg-indigo-200 text-indigo-900 text-xs font-semibold rounded-md">Vínculo Adscrito</span>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-200">
+                        <div class="flex items-center gap-3 mb-3 text-purple-700">
+                            <i class="fa-solid fa-compass text-2xl"></i>
+                            <h4 class="font-bold text-purple-950 text-lg">Grupo de Referencia</h4>
+                        </div>
+                        <p class="text-sm text-slate-700 mb-4 leading-relaxed">
+                            Colectivo con cuyos valores se identifica la persona e imita para moldear su conducta. Ejerce dos funciones clave:
+                        </p>
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-white/80 p-2.5 rounded-lg border border-purple-100">
+                                <strong class="text-purple-900">1. Función Normativa:</strong> Pauta directrices de actuación, lenguaje y vestimenta.
+                            </div>
+                            <div class="bg-white/80 p-2.5 rounded-lg border border-purple-100">
+                                <strong class="text-purple-900">2. Función Comparativa:</strong> Sirve de baremo de autoestimación y valoración personal.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Otras Configuraciones Colectivas -->
+                <h4 class="font-bold text-slate-900 text-base pt-2">Otras Configuraciones Colectivas:</h4>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 text-rose-600"><i class="fa-solid fa-users-rays mr-1.5"></i> Muchedumbre</h5>
+                        <p class="text-xs text-slate-600">Más de 50 individuos sin vínculos articulados, objetivos difusos y alto contagio emocional.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 text-indigo-600"><i class="fa-solid fa-user-group mr-1.5"></i> Banda</h5>
+                        <p class="text-xs text-slate-600">Grupo reducido que persigue la búsqueda de similitud o afinidad mutua explícita.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 text-emerald-600"><i class="fa-solid fa-network-wired mr-1.5"></i> Agrupamiento</h5>
+                        <p class="text-xs text-slate-600">Número variable, contactos periódicos y metas comunes con vínculos interpersonales superficiales.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 text-amber-600"><i class="fa-solid fa-tag mr-1.5"></i> Designación Externa</h5>
+                        <p class="text-xs text-slate-600">Agrupados por etiquetas o clasificaciones elaboradas por otros sectores sociales (p. ej., colectivos de migrantes o sin hogar).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECCIÓN 3: ESTRUCTURA INTERNA, ROLES Y LIDERAZGO
+             ========================================== -->
+        <section id="sec3" class="tab-content hidden space-y-10">
+            <!-- Hero Title -->
+            <div class="bg-gradient-to-r from-amber-900 via-orange-900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-2xl">
+                <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-bold tracking-wider rounded-full uppercase mb-3">Bloque 3.1 - 3.2</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Estructura Interna: Roles y Estilos de Liderazgo</h2>
+                <p class="text-slate-300 max-w-3xl text-base sm:text-lg">
+                    Análisis de funciones individuales dentro de la dinámica grupal y estilos de conducción del líder (Autoritario, Democrático, Laissez-faire).
+                </p>
+            </div>
+
+            <!-- 3.1 Los Roles Grupales -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-lg font-bold">3.1</div>
+                        <div>
+                            <h3 class="font-heading text-xl font-bold text-slate-900">Los Roles Grupales</h3>
+                            <p class="text-sm text-slate-500">Papel diferenciado en respuesta a expectativas recíprocas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl text-sm text-slate-700 border border-slate-200">
+                    <strong class="text-slate-900">Concepto de Rol:</strong> Es la función o papel diferenciado que un individuo asume en un grupo concreto en respuesta a las expectativas recíprocas. Una misma persona ejerce roles dispares según el ámbito (laboral, familiar, asociativo).
+                </div>
+
+                <!-- Roles Visualizer Grid -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Tarea -->
+                    <div class="bg-blue-50/60 border border-blue-200 rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <h4 class="font-bold text-blue-950 text-lg">Centrados en la Tarea</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Miembros que impulsan la actividad hacia el objetivo; proponen ideas, buscan datos, sintetizan aportaciones y guían la toma de acuerdos.
+                        </p>
+                    </div>
+
+                    <!-- Cohesión -->
+                    <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        </div>
+                        <h4 class="font-bold text-emerald-950 text-lg">Centrados en la Cohesión</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Integrantes enfocados en consolidar un clima interpersonal armonioso, reducir asperezas, dinamizar la participación y asegurar la fluidez comunicativa.
+                        </p>
+                    </div>
+
+                    <!-- Obstaculizadores -->
+                    <div class="bg-rose-50/60 border border-rose-200 rounded-2xl p-6 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                        <h4 class="font-bold text-rose-950 text-lg">Roles Obstaculizadores</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Conductas autorreferenciales que persiguen la notoriedad o conveniencia personal, boicoteando la dinámica colectiva mediante el desacuerdo constante o la manipulación.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.2 Estilos de Liderazgo Simulator -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-lg font-bold">3.2</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Estilos de Liderazgo e Impacto Grupal</h3>
+                        <p class="text-sm text-slate-500">Selecciona un estilo para simular su efecto en el grupo</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="setLeadershipStyle('democrat')" id="btn-democrat" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-600 text-white shadow-md transition-all">
+                        <i class="fa-solid fa-users mr-2"></i>Líder Democrático
+                    </button>
+                    <button onclick="setLeadershipStyle('authoritative')" id="btn-authoritative" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all">
+                        <i class="fa-solid fa-user-shield mr-2"></i>Líder Autoritario
+                    </button>
+                    <button onclick="setLeadershipStyle('laissez')" id="btn-laissez" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all">
+                        <i class="fa-solid fa-wind mr-2"></i>Laissez-Faire (Permisivo)
+                    </button>
+                </div>
+
+                <!-- Simulation Output Display -->
+                <div id="leadershipDisplay" class="bg-slate-900 text-white p-6 rounded-2xl shadow-inner space-y-4">
+                    <!-- Dynamic Content inserted via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECCIÓN 4: DINÁMICA, TÉCNICAS Y DISEÑO METODOLÓGICO
+             ========================================== -->
+        <section id="sec4" class="tab-content hidden space-y-10">
+            <!-- Hero Title -->
+            <div class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-2xl">
+                <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold tracking-wider rounded-full uppercase mb-3">Bloque 4.1 - 4.4</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Dinámica y Técnicas de Grupo: Diseño Metodológico</h2>
+                <p class="text-slate-300 max-w-3xl text-base sm:text-lg">
+                    Diferenciación conceptual, evolución histórica, criterios de selección, estructura normalizada de la ficha técnica y pautas de conducción.
+                </p>
+            </div>
+
+            <!-- 4.1 Fundamentación Conceptual y Evolución -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">4.1</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Fundamentación Conceptual y Evolución Histórica</h3>
+                        <p class="text-sm text-slate-500">Dinámica vs Técnica de grupo</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-teal-50 border border-teal-200 p-5 rounded-2xl">
+                        <span class="text-xs font-bold text-teal-800 uppercase tracking-wide">Disciplina / Ciencia</span>
+                        <h4 class="font-bold text-teal-950 text-lg mb-2">Dinámica de Grupo</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            Disciplina psicosocial orientada al estudio de las fuerzas, leyes e interdependencias internas que acontecen en la vida del grupo.
+                        </p>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 p-5 rounded-2xl">
+                        <span class="text-xs font-bold text-blue-800 uppercase tracking-wide">Procedimiento / Herramienta</span>
+                        <h4 class="font-bold text-blue-950 text-lg mb-2">Técnica de Grupo</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            Procedimiento metodológico y estructurado que aplica el facilitador como herramienta operativa para intervenir en dichas fuerzas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2 text-xs text-slate-700">
+                    <div class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-clock-rotate-left mr-2 text-emerald-600"></i>Evolución Histórica & Propiedades</div>
+                    <p>
+                        Tras su conceptualización teórica ligada a <strong>Kurt Lewin</strong>, el estudio de las dinámicas grupales se introduce en España en los años 70 y alcanza su consolidación en los años 80 con el desarrollo de la intervención comunitaria.
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1 pt-1">
+                        <li>Constituyen un <strong>medio instrumental</strong>, jamás una finalidad en sí mismas.</li>
+                        <li>Exigen un <strong>enfoque participativo</strong> e integran armónicamente teoría y práctica.</li>
+                        <li>Su aplicación se gradúa de menor a mayor nivel de profundización temática y favorece el aprendizaje significativo.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 4.2 Criterios para la Selección de Técnicas -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center text-lg font-bold">4.2</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Criterios para la Selección de Técnicas</h3>
+                        <p class="text-sm text-slate-500">Factores situacionales que condicionan la elección metodológica</p>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-slate-900 font-bold text-sm block mb-1"><i class="fa-solid fa-bullseye text-emerald-600 mr-2"></i>Objetivos perseguidos</strong>
+                        Definición precisa de lo que se desea conseguir (presentación, producción, resolución de crisis).
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-slate-900 font-bold text-sm block mb-1"><i class="fa-solid fa-seedling text-emerald-600 mr-2"></i>Grado de madurez grupal</strong>
+                        En grupos noveles se aplican técnicas sencillas para evitar bloqueos por inhibición; los grupos entrenados asumen dinámicas más complejas.
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-slate-900 font-bold text-sm block mb-1"><i class="fa-solid fa-arrows-up-to-line text-emerald-600 mr-2"></i>Dimensión del colectivo</strong>
+                        Los grupos reducidos facilitan la interacción y consenso rápido; los extensos demandan dinámicas muy pautadas para evitar dispersión.
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-slate-900 font-bold text-sm block mb-1"><i class="fa-solid fa-building text-emerald-600 mr-2"></i>Condiciones del entorno</strong>
+                        Espacio físico (interior/exterior), disponibilidad de recursos materiales y gestión equilibrada de los tiempos.
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 sm:col-span-2 lg:col-span-2">
+                        <strong class="text-slate-900 font-bold text-sm block mb-1"><i class="fa-solid fa-user-graduate text-emerald-600 mr-2"></i>Capacitación y experiencia del dinamizador</strong>
+                        Dominio técnico y seguridad personal del facilitador para gestionar imprevistos y emociones.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4.3 Estructura Normalizada de la Ficha Técnica (Interactive Inspector) -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">4.3</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Estructura Normalizada de la Ficha Técnica</h3>
+                        <p class="text-sm text-slate-500">Visualizador estandarizado para la sistematización de recursos</p>
+                    </div>
+                </div>
+
+                <!-- 10 Sections Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    <button onclick="inspectFichaSection(1)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">1. Título</button>
+                    <button onclick="inspectFichaSection(2)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">2. Código</button>
+                    <button onclick="inspectFichaSection(3)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">3. Destinatarios</button>
+                    <button onclick="inspectFichaSection(4)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">4. Objetivos</button>
+                    <button onclick="inspectFichaSection(5)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">5. Desarrollo</button>
+                    <button onclick="inspectFichaSection(6)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">6. Tiempos</button>
+                    <button onclick="inspectFichaSection(7)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">7. Recursos</button>
+                    <button onclick="inspectFichaSection(8)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">8. Lugar</button>
+                    <button onclick="inspectFichaSection(9)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">9. Variantes</button>
+                    <button onclick="inspectFichaSection(10)" class="ficha-sec-btn p-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all text-left">10. Evaluación</button>
+                </div>
+
+                <div id="fichaDetailDisplay" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-emerald-950 text-sm">
+                    Haz clic en cualquiera de las 10 secciones superiores para consultar su especificación profesional en la ficha técnica.
+                </div>
+            </div>
+
+            <!-- 4.4 Pautas de Conducción para Dinamizar -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center text-lg font-bold">4.4</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Pautas de Conducción para Dinamizar el Grupo</h3>
+                        <p class="text-sm text-slate-500">Recomendaciones clave de actuación profesional</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4 text-xs text-slate-700">
+                    <div class="flex items-start gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <i class="fa-solid fa-shield-halved text-emerald-600 text-base mt-0.5"></i>
+                        <div>Establecer un ambiente seguro, cordial y tolerante.</div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <i class="fa-solid fa-circle-question text-emerald-600 text-base mt-0.5"></i>
+                        <div>Cerciorarse de que todas las consignas e instrucciones han sido comprendidas cabalmente antes de empezar.</div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <i class="fa-solid fa-hourglass-end text-emerald-600 text-base mt-0.5"></i>
+                        <div>Reservar un tiempo final inexcusable para la recapitulación colectiva y evaluación de vivencias.</div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <i class="fa-solid fa-sliders text-emerald-600 text-base mt-0.5"></i>
+                        <div>Gestionar con flexibilidad el desarrollo ante cualquier incidencia que surja.</div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200 md:col-span-2">
+                        <i class="fa-solid fa-eye text-emerald-600 text-base mt-0.5"></i>
+                        <div>Reducir las directrices verbales excesivas e incorporar recursos de comunicación no verbal.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECCIÓN 5: ANÁLISIS GRUPAL (SOCIOMETRÍA Y ROLE-PLAYING)
+             ========================================== -->
+        <section id="sec5" class="tab-content hidden space-y-10">
+            <!-- Hero Title -->
+            <div class="bg-gradient-to-r from-cyan-900 via-blue-900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-2xl">
+                <span class="inline-block px-3 py-1 bg-cyan-500/20 text-cyan-300 text-xs font-bold tracking-wider rounded-full uppercase mb-3">Bloque 5.1 - 5.3</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Técnicas para el Análisis Grupal: Sociometría y Role-Playing</h2>
+                <p class="text-slate-300 max-w-3xl text-base sm:text-lg">
+                    Exploración de la estructura formal vs informal, simulador cuantitativo de sociogramas e interpretación del juego de roles.
+                </p>
+            </div>
+
+            <!-- 5.1 Estructura Formal vs No Formal -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center text-lg font-bold">5.1</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Estructura Interna del Grupo</h3>
+                        <p class="text-sm text-slate-500">Coexistencia de dos dimensiones organizativas</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-nested text-blue-600"></i> Estructura Formal
+                        </h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Configuración oficial establecida en función de las metas y tareas prescritas por la institución u organización.
+                        </p>
+                    </div>
+
+                    <div class="bg-cyan-50 p-6 rounded-2xl border border-cyan-200">
+                        <h4 class="font-bold text-cyan-950 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-heart-pulse text-cyan-600"></i> Estructura No Formal (Informal)
+                        </h4>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Entramado de simpatías, afinidades y rechazos socioafectivos espontáneos. <strong class="text-cyan-900">Es la que ejerce un mayor impacto real en el clima del colectivo</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5.2 El Sociograma: Procedimiento & Simulador Interactivo -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center text-lg font-bold">5.2</div>
+                        <div>
+                            <h3 class="font-heading text-xl font-bold text-slate-900">El Sociograma & Mapa Sociométrico</h3>
+                            <p class="text-sm text-slate-500">Procedimiento cuantitativo y simulador visual de posiciones socioafectivas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Procedimiento en 4 Pasos -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-blue-600 font-bold block mb-1">Paso 1: Preguntas</strong>
+                        Redactar preguntas claras cotidianas de atracción o rechazo («¿Con quién trabajarías?»).
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-blue-600 font-bold block mb-1">Paso 2: Tabulación</strong>
+                        Matriz sociométrica de doble entrada para volcar respuestas recibidas/emitidas.
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-blue-600 font-bold block mb-1">Paso 3: Confección</strong>
+                        Representar círculos (hombres) / triángulos (mujeres) con flechas direccionales.
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-blue-600 font-bold block mb-1">Paso 4: Interpretación</strong>
+                        Análisis global de cohesión/subgrupos y posiciones sociométricas individuales.
+                    </div>
+                </div>
+
+                <!-- Interactive Sociogram Interactive Canvas Container -->
+                <div class="bg-slate-900 p-6 rounded-2xl text-white space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <span class="font-bold text-sm text-cyan-400"><i class="fa-solid fa-atom mr-2"></i>Simulador de Posiciones Sociométricas</span>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <button onclick="highlightSociometricNode('lider')" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold transition-all">Líder</button>
+                            <button onclick="highlightSociometricNode('integrado')" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold transition-all">Integrado</button>
+                            <button onclick="highlightSociometricNode('marginado')" class="px-3 py-1.5 rounded-lg bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold transition-all">Marginado</button>
+                            <button onclick="highlightSociometricNode('aislado')" class="px-3 py-1.5 rounded-lg bg-purple-500 hover:bg-purple-600 text-slate-950 font-bold transition-all">Aislado</button>
+                        </div>
+                    </div>
+
+                    <!-- Sociogram Map Visual Canvas Simulation -->
+                    <div class="relative w-full h-64 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center p-4 overflow-hidden" id="sociogramCanvas">
+                        <!-- Node elements with tooltips -->
+                        <div id="node-lider" class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-amber-500 text-slate-950 flex flex-col items-center justify-center font-bold text-xs shadow-lg shadow-amber-500/30 transition-all cursor-pointer">
+                            <i class="fa-solid fa-crown text-sm"></i>
+                            <span>Líder</span>
+                        </div>
+
+                        <div id="node-integrado" class="absolute top-1/2 left-1/4 -translate-y-1/2 w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex flex-col items-center justify-center font-bold text-xs shadow-lg shadow-emerald-500/30 transition-all cursor-pointer">
+                            <i class="fa-solid fa-user-check text-xs"></i>
+                            <span>A</span>
+                        </div>
+
+                        <div id="node-marginado" class="absolute bottom-6 left-1/3 w-12 h-12 bg-rose-500 text-slate-950 flex flex-col items-center justify-center font-bold text-xs shadow-lg shadow-rose-500/30 transition-all cursor-pointer" style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);">
+                            <span class="mt-2">B</span>
+                        </div>
+
+                        <div id="node-aislado" class="absolute top-8 right-12 w-11 h-11 rounded-full bg-purple-500 text-slate-950 flex flex-col items-center justify-center font-bold text-xs shadow-lg shadow-purple-500/30 transition-all cursor-pointer">
+                            <span>C</span>
+                        </div>
+                    </div>
+
+                    <div id="sociogramExplanation" class="bg-slate-800 p-4 rounded-xl text-xs text-slate-300 leading-relaxed border border-slate-700">
+                        Selecciona cualquier botón de posición sociométrica para ver la explicación diagnóstica en tiempo real.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5.3 El Juego de Roles (Role-Playing) -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-4">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold">5.3</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">El Juego de Roles (Role-Playing)</h3>
+                        <p class="text-sm text-slate-500">Escenificación dramática interactiva</p>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Procedimiento en el que dos o más personas escenifican una situación interactiva asumiendo papeles asignados. Permite exteriorizar conflictos, favorecer la empatía al colocarse en la perspectiva del otro y analizar alternativas de resolución en debates posteriores.
+                </p>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECCIÓN 6: FACTORES PSICOSOCIALES
+             ========================================== -->
+        <section id="sec6" class="tab-content hidden space-y-10">
+            <!-- Hero Title -->
+            <div class="bg-gradient-to-r from-rose-900 via-pink-900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-2xl">
+                <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-300 text-xs font-bold tracking-wider rounded-full uppercase mb-3">Bloque 6.1 - 6.3</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Factores Psicosociales: Motivación, Pertenencia y Cohesión</h2>
+                <p class="text-slate-300 max-w-3xl text-base sm:text-lg">
+                    Sostenimiento motivacional, necesidad adaptativa de afiliación, sesgos "Nosotros vs Ellos" y determinantes de la cohesión interna.
+                </p>
+            </div>
+
+            <!-- 6.1 Motivación Individual y Grupal -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-lg font-bold">6.1</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">La Motivación Individual y Grupal</h3>
+                        <p class="text-sm text-slate-500">Satisfacción de necesidades primarias de afiliación, seguridad y estima</p>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-100">
+                        <strong class="text-rose-900 font-bold block mb-1">Éxitos Compartidos</strong>
+                        Promoción deliberada de los éxitos del equipo sobre el lucimiento individual.
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-slate-900 font-bold block mb-1">Ajuste de Competencias</strong>
+                        Ajuste óptimo entre las habilidades personales y la tarea designada.
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-slate-900 font-bold block mb-1">Retroalimentación Positiva</strong>
+                        Evaluación continua que premie y reconozca explícitamente el esfuerzo común.
+                    </div>
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-100">
+                        <strong class="text-rose-900 font-bold block mb-1">Motivación Intrínseca</strong>
+                        Fomento del compromiso personal basado en la satisfacción interna con la tarea.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6.2 Necesidad de Pertenencia & Nosotros vs Ellos -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center text-lg font-bold">6.2</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">La Necesidad de Pertenencia y la Polaridad "Nosotros vs Ellos"</h3>
+                        <p class="text-sm text-slate-500">Dinámica de identidad social y resolución de prejuicios</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-2xl border border-purple-200 space-y-3">
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Es una necesidad básica y adaptativa ligada a la supervivencia de la especie humana. Los colectivos tienden a consolidar su identidad no solo por rasgos propios, sino por contraposición o diferenciación respecto a grupos ajenos (<strong>"Nosotros vs Ellos"</strong>).
+                    </p>
+                    <div class="p-4 bg-white rounded-xl border border-purple-200 text-xs text-purple-950 font-medium">
+                        <i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i><strong>Intervención Profesional:</strong> Para resolver conflictos intergrupales o prejuicios sociales basados en esta dicotomía, se deben buscar elementos y objetivos supraordenados (compartidos) que unifiquen a las partes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6.3 La Cohesión Grupal -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center text-lg font-bold">6.3</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">La Cohesión Grupal</h3>
+                        <p class="text-sm text-slate-500">Grado de unión, solidaridad y satisfacción mutua</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 text-xs">
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                        <strong class="text-slate-900 text-sm block font-bold">Factores Determinantes</strong>
+                        <ul class="space-y-1.5 text-slate-600">
+                            <li>• <strong>Internos:</strong> Claridad en los objetivos, tamaño adecuado y existencia de normas compartidas.</li>
+                            <li>• <strong>Externos:</strong> Estilo de liderazgo del coordinador y demandas del entorno institucional.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-5 bg-pink-50 rounded-2xl border border-pink-200 space-y-2">
+                        <strong class="text-pink-950 text-sm block font-bold">Estrategias de Consolidadación</strong>
+                        <p class="text-slate-700">
+                            Diseñar espacios de trabajo acogedores, propiciar un clima libre de juicios donde se minimicen las tensiones y definir metas transparentes y operativas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECCIÓN 7: EL EQUIPO DE TRABAJO Y COMUNICACIÓN PROFESIONAL
+             ========================================== -->
+        <section id="sec7" class="tab-content hidden space-y-10">
+            <!-- Hero Title -->
+            <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 rounded-3xl p-8 sm:p-10 text-white shadow-2xl">
+                <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold tracking-wider rounded-full uppercase mb-3">Bloque 7.1 - 7.3</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">El Equipo de Trabajo y la Comunicación Profesional</h2>
+                <p class="text-slate-300 max-w-3xl text-base sm:text-lg">
+                    Roles laborales específicos, ejercicio del poder, superación de barreras comunicativas y el principio de Multiplicación Cooperativa.
+                </p>
+            </div>
+
+            <!-- 7.1 Roles Específicos en el Equipo Laboral -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold">7.1</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Roles Específicos en el Equipo Laboral</h3>
+                        <p class="text-sm text-slate-500">Clasificación por implicación y por función organizativa</p>
+                    </div>
+                </div>
+
+                <!-- Implicación -->
+                <h4 class="font-bold text-slate-900 text-sm">A) Según el Grado de Implicación y Participación:</h4>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <strong class="text-slate-900 font-bold block mb-1">Rol Pasivo</strong>
+                        No formula propuestas; suele derivar de jerarquías donde percibe que su criterio carece de valor.
+                    </div>
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-200">
+                        <strong class="text-rose-900 font-bold block mb-1">Rol de Ataque</strong>
+                        Oposición sistemática por rivalidad personal, entorpeciendo el consenso.
+                    </div>
+                    <div class="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                        <strong class="text-amber-900 font-bold block mb-1">Buscador de Reconocimiento</strong>
+                        Participa hiperactivamente buscando admiración, desgastando al grupo.
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                        <strong class="text-blue-900 font-bold block mb-1">«Todo es Opinable»</strong>
+                        Cuestiona propuestas argumentando mejoras; positivo salvo que cause parálisis.
+                    </div>
+                </div>
+
+                <!-- Función Organizativa -->
+                <h4 class="font-bold text-slate-900 text-sm pt-2">B) Según la Función Organizativa Asignada:</h4>
+                <div class="grid md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-200">
+                        <strong class="text-indigo-950 font-bold text-sm block mb-1">Rol de Coordinador-Moderador</strong>
+                        Estructura turnos de intervención, canaliza los temas y sintetiza los acuerdos.
+                    </div>
+                    <div class="p-4 bg-teal-50 rounded-xl border border-teal-200">
+                        <strong class="text-teal-950 font-bold text-sm block mb-1">Rol de Observador</strong>
+                        Registra objetivamente la dinámica interpersonal, liderazgos informales y bloqueos comunicativos para proyectar mejoras.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7.2 Liderazgo, Poder y Cooperación -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-bold">7.2</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Liderazgo, Ejercicio del Poder y Cooperación</h3>
+                        <p class="text-sm text-slate-500">Uso constructivo del poder y Multiplicación Cooperativa</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 text-xs">
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                        <strong class="text-slate-900 font-bold text-sm block">Uso del Poder</strong>
+                        <p class="text-slate-600">
+                            <strong>Constructivo:</strong> Fomenta la participación horizontal, integra discrepancias y fortalece la unión grupal.<br>
+                            <strong>Destructivo:</strong> Estimula camarillas o centraliza obsesivamente las decisiones.
+                        </p>
+                    </div>
+
+                    <div class="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 space-y-2">
+                        <strong class="text-blue-950 font-bold text-sm block"><i class="fa-solid fa-xmark-cross mr-1 text-blue-600"></i>Multiplicación Cooperativa (Cembranos y Medina)</strong>
+                        <p class="text-slate-700">
+                            Cooperar en el equipo implica enriquecer y multiplicar las propuestas ajenas, haciendo transitar las ideas individuales hacia soluciones colectivas de mayor alcance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7.3 Barreras Comunicativas y su Superación -->
+            <div class="searchable-card bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-lg font-bold">7.3</div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-slate-900">Barreras Comunicativas y Pautas de Optimización</h3>
+                        <p class="text-sm text-slate-500">Diagnóstico de obstáculos e intervenciones correctoras</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Barreras -->
+                    <div class="bg-rose-50/60 p-5 rounded-2xl border border-rose-200 space-y-3 text-xs">
+                        <strong class="text-rose-950 font-bold text-sm block"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Obstáculos Principales</strong>
+                        <ul class="space-y-2 text-slate-700">
+                            <li>• <strong>Jerarquías rígidas:</strong> Comunicación unidireccional que anula aportaciones noveles.</li>
+                            <li>• <strong>Comunicación de oposición:</strong> Intervenciones motivadas únicamente por antagonismo personal.</li>
+                            <li>• <strong>Comunicación de existencia:</strong> Hablar sin contenido solo para hacerse notar («hablo, luego existo»).</li>
+                            <li>• <strong>Inhibición de la escucha activa:</strong> Provocada por sentimientos de inferioridad o desconexión.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Optimización -->
+                    <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-200 space-y-3 text-xs">
+                        <strong class="text-emerald-950 font-bold text-sm block"><i class="fa-solid fa-circle-check mr-2"></i>Pautas de Optimización</strong>
+                        <ul class="space-y-2 text-slate-700">
+                            <li>• Brindar refuerzo social y validar la competencia profesional de cada integrante.</li>
+                            <li>• Enfocar el esfuerzo hacia el logro compartido frente al éxito individualista.</li>
+                            <li>• Ejercitar una escucha activa y paciente que suprima juicios precipitados y respete los tiempos ajenos.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+   <!-- FOOTER ACADÉMICO -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 glass-panel py-8 text-center text-xs text-slate-500 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="font-semibold text-slate-700 dark:text-slate-300">IES Avempace · Zaragoza | Módulo Profesional de Habilidades Sociales</p>
+            <p>Caso Práctico elaborado por <span class="text-violet-600 dark:text-violet-400 font-medium">Ana Maria da Cunha Goncalves</span> bajo la tutoría de <span class="text-slate-700 dark:text-slate-300 font-medium">Rosa Maria Vitaller Cebrián</span>.</p>
+            <p class="text-[10px] text-slate-400">© <span id="footer-year"></span> Todos los derechos reservados. Diseñado para aprender y entender el temario.</p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // READING PROGRESS BAR
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+
+        // TAB NAVIGATION SYSTEM
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-' + tabId);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ACCORDION TOGGLE FUNCTION
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // TOGGLE ALL ACCORDIONS
+        let allExpanded = false;
+        function toggleAllAccordions() {
+            allExpanded = !allExpanded;
+            const accordions = document.querySelectorAll('[id$="-acc"], [id^="acc-"]');
+            accordions.forEach(acc => {
+                if (allExpanded) {
+                    acc.classList.remove('hidden');
+                } else {
+                    acc.classList.add('hidden');
+                }
+            });
+            document.getElementById('toggleAllBtnText').innerText = allExpanded ? 'Colapsar Todo' : 'Expandir Todo';
+        }
+
+        // LEADERSHIP SIMULATOR LOGIC
+        const leadershipData = {
+            democrat: {
+                title: "Estilo Democrático (Consensual)",
+                desc: "Guía proponiendo metas y recursos, dialogando y consensuando el reparto de responsabilidades. Fomenta la autonomía, la iniciativa, la creatividad y la comunicación fluida, sosteniendo el rendimiento del colectivo aun en su ausencia.",
+                color: "emerald"
+            },
+            authoritative: {
+                title: "Estilo Autoritario (Directivo)",
+                desc: "Monopoliza las decisiones, los medios y el reparto de funciones sin consultar al grupo. Muestra escasa confianza en los demás; genera baja cohesión, dependencia de su presencia física y apatía cuando se ausenta.",
+                color: "slate"
+            },
+            laissez: {
+                title: "Estilo Laissez-Faire (Permisivo)",
+                desc: "Adopta una pasividad casi absoluta, abandonando la estructuración de tareas y dejando el proceso sin rumbo definido ni efectividad operativa.",
+                color: "amber"
+            }
+        };
+
+        function setLeadershipStyle(type) {
+            const data = leadershipData[type];
+            const display = document.getElementById('leadershipDisplay');
+            
+            // Highlight buttons
+            ['democrat', 'authoritative', 'laissez'].forEach(id => {
+                const btn = document.getElementById('btn-' + id);
+                if (id === type) {
+                    btn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-600 text-white shadow-md transition-all";
+                } else {
+                    btn.className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all";
+                }
+            });
+
+            display.innerHTML = `
+                <div class="flex items-center gap-3 text-emerald-400 font-bold text-lg border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-gauge-high"></i> ${data.title}
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">${data.desc}</p>
+            `;
+        }
+
+        // FICHA TÉCNICA INSPECTOR DATA
+        const fichaSections = {
+            1: "<strong>1. Título:</strong> Nombre identificativo del procedimiento (p. ej., 'El Torbellino de Ideas').",
+            2: "<strong>2. Código de Clasificación:</strong> Tipología a la que se adscribe funcionalmente.",
+            3: "<strong>3. Destinatarios:</strong> Edad, volumen y características socioafectivas del grupo.",
+            4: "<strong>4. Objetivos:</strong> Metas y aprendizajes específicos que se persiguen.",
+            5: "<strong>5. Desarrollo:</strong> Fases secuenciales de ejecución y consignas exactas.",
+            6: "<strong>6. Temporización:</strong> Esquema de tiempos parciales y duración global.",
+            7: "<strong>7. Recursos:</strong> Equipamiento, materiales necesarios y personal de apoyo.",
+            8: "<strong>8. Lugar:</strong> Requisitos del espacio (iluminación, acústica, interior/exterior).",
+            9: "<strong>9. Variantes:</strong> Adaptaciones metodológicas para flexibilizar la dinámica ante contingencias.",
+            10: "<strong>10. Evaluación:</strong> Criterios para recapitular vivencias y logros obtenidos."
+        };
+
+        function inspectFichaSection(num) {
+            const display = document.getElementById('fichaDetailDisplay');
+            display.innerHTML = fichaSections[num];
+        }
+
+        // SOCIOGRAM SIMULATION HIGHLIGHTER
+        function highlightSociometricNode(role) {
+            const display = document.getElementById('sociogramExplanation');
+            
+            // Reset node highlights
+            document.querySelectorAll('#sociogramCanvas > div').forEach(node => {
+                node.style.transform = 'scale(1)';
+                node.style.border = 'none';
+            });
+
+            if (role === 'lider') {
+                const node = document.getElementById('node-lider');
+                node.style.transform = 'scale(1.25)';
+                node.style.border = '3px solid white';
+                display.innerHTML = "<strong>Líder Sociométrico:</strong> Persona que acumula la mayor cantidad de elecciones positivas directas. Vertebra el clima de la estructura informal.";
+            } else if (role === 'integrado') {
+                const node = document.getElementById('node-integrado');
+                node.style.transform = 'scale(1.2)';
+                node.style.border = '3px solid white';
+                display.innerHTML = "<strong>Sujeto Integrado:</strong> Mantiene varias elecciones socioafectivas recíprocas en el sociograma.";
+            } else if (role === 'marginado') {
+                const node = document.getElementById('node-marginado');
+                node.style.transform = 'scale(1.2)';
+                display.innerHTML = "<strong>Sujeto Marginado:</strong> Emite elecciones hacia otros miembros pero no recibe correspondencia recíproca.";
+            } else if (role === 'aislado') {
+                const node = document.getElementById('node-aislado');
+                node.style.transform = 'scale(1.2)';
+                node.style.border = '3px solid white';
+                display.innerHTML = "<strong>Sujeto Aislado:</strong> No emite ni recibe ninguna elección dentro del grupo tabulado.";
+            }
+        }
+
+        // GLOBAL SEARCH SYSTEM
+        function filterContent() {
+            const query = document.getElementById('globalSearch').value.toLowerCase().trim();
+            const panel = document.getElementById('searchResultsPanel');
+            const countSpan = document.getElementById('searchResultCount');
+            const cards = document.querySelectorAll('.searchable-card');
+            
+            if (!query) {
+                clearSearch();
+                return;
+            }
+
+            // Unhide all tabs during search
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('hidden'));
+
+            let matchCount = 0;
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.classList.remove('hidden');
+                    matchCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            panel.classList.remove('hidden');
+            countSpan.innerText = `Se encontraron ${matchCount} tarjetas con coincidencias para "${query}"`;
+        }
+
+        function clearSearch() {
+            document.getElementById('globalSearch').value = '';
+            document.getElementById('searchResultsPanel').classList.add('hidden');
+            document.querySelectorAll('.searchable-card').forEach(card => card.classList.remove('hidden'));
+            switchTab('sec1');
+        }
+
+        // Initialize default view state
+        window.onload = function() {
+            setLeadershipStyle('democrat');
+        };
+    </script>
+</body>
+</html>

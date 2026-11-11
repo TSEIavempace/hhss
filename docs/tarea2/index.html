@@ -170,6 +170,7 @@ más que aportar soluciones al equipo.
 Como consecuencia de estas interacciones, el clima de trabajo se muestra tenso, la
 comunicación es unidireccional y se observa una clara falta de cohesión en el grupo.
 
+                    </p>
 
                     <div class="pt-2 flex flex-wrap gap-4 justify-center lg:justify-start">
                         <a href="#roles" class="px-6 py-3 rounded-xl bg-gradient-to-r from-coral-500 to-violet-600 text-white font-semibold shadow-lg shadow-coral-500/30 hover:shadow-coral-500/50 hover:scale-[1.02] transition-all flex items-center space-x-2">
@@ -622,7 +623,7 @@ comunicación es unidireccional y se observa una clara falta de cohesión en el 
         <div class="max-w-7xl mx-auto px-4 space-y-2">
             <p class="font-semibold text-slate-700 dark:text-slate-300">IES Avempace · Zaragoza | Módulo Profesional de Habilidades Sociales</p>
             <p>Caso Práctico elaborado por <span class="text-violet-600 dark:text-violet-400 font-medium">Ana Maria da Cunha Goncalves</span> bajo la tutoría de <span class="text-slate-700 dark:text-slate-300 font-medium">Rosa Maria Vitaller Cebrián</span>.</p>
-            <p class="text-[10px] text-slate-400">© <span id="footer-year"></span> Todos los derechos reservados. Diseñado para complementar trabajo en pdf.</p>
+            <p class="text-[10px] text-slate-400">© <span id="footer-year"></span> Todos los derechos reservados. Diseñado para fines educativos pedagógicos.</p>
         </div>
     </footer>
 
@@ -801,8 +802,106 @@ comunicación es unidireccional y se observa una clara falta de cohesión en el 
             }
         };
 
+        const roleSimulations = {
+            marta: {
+                name: "Marta (Liderazgo Democrático)",
+                content: `
+                    <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                        <p class="font-semibold text-emerald-800 dark:text-emerald-300">"Buenos días a todos. Vamos a comenzar revisando el orden del día. Me gustaría que cada una aporte sus ideas antes de tomar cualquier decisión unánime."</p>
+                    </div>
+                    <p>Marta modera la intervención con cordialidad, asegurando turnos equitativos y valorando positivamente el criterio técnico de todas las integrantes.</p>
+                `
+            },
+            elena: {
+                name: "Elena (Rol de Ataque y Autocrático)",
+                content: `
+                    <div class="p-3 bg-rose-50 dark:bg-rose-950/40 rounded-lg border border-rose-200 dark:border-rose-800">
+                        <p class="font-semibold text-rose-800 dark:text-rose-300">"Esa propuesta no tiene sentido. Llevo más de quince años en este centro y las cosas siempre se han hecho como yo digo. No acepto opiniones de recién llegadas."</p>
+                    </div>
+                    <p>Elena descalifica directamente las propuestas innovadoras de Lucía y trata de imponer su visión bloqueando el trabajo grupal.</p>
+                `
+            },
+            lucia: {
+                name: "Lucía (Rol Pasivo e Inhibido)",
+                content: `
+                    <div class="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-lg border border-amber-200 dark:border-amber-800">
+                        <p class="font-semibold text-amber-800 dark:text-amber-300">"(Guarda silencio y baja la mirada) Mejor no digo nada... Como acabo de incorporarme al centro, seguro que mi propuesta no es adecuada."</p>
+                    </div>
+                    <p>Lucía asume una posición de escucha permanente sin respuesta debido al temor al rechazo de Elena y a sentimientos de inferioridad.</p>
+                `
+            },
+            pablo: {
+                name: "Pablo (Búsqueda de Reconocimiento)",
+                content: `
+                    <div class="p-3 bg-violet-50 dark:bg-violet-950/40 rounded-lg border border-violet-200 dark:border-violet-800">
+                        <p class="font-semibold text-violet-800 dark:text-violet-300">"Antes de seguir, quiero remarcar la enorme cantidad de horas extras que he dedicado esta semana a la programación para que la dirección lo valore."</p>
+                    </div>
+                    <p>Pablo interrumpe el debate técnico buscando la admiración y atención de los superiores, alejando al grupo del objetivo pedagógico.</p>
+                `
+            }
+        };
+
+        const sociogramData = {
+            marta: {
+                title: "Marta (Coordinadora / Líder Formal)",
+                desc: "Recibe elecciones mutuas en el criterio laboral debido a su capacidad organizativa democrática. Su liderazgo informal coincide de forma positiva con su rol formal.",
+                badges: ["Elección Mutua Laboral", "Líder Democrática", "Aceptación Grupal Alta"]
+            },
+            elena: {
+                title: "Elena (Docente Veterana / Poder Informal Negativo)",
+                desc: "Genera rechazos manifiestos en el ámbito afectivo y relacional debido a su actitud impositiva. Forma un subgrupo informal de influencia rígida con Pablo.",
+                badges: ["Rechazo Activo", "Poder Informal Dominante", "Baja Cohesión Afectiva"]
+            },
+            lucia: {
+                title: "Lucía (Docente Novel / Aislada)",
+                desc: "No recibe elecciones activas en el sociograma debido a su inhibición. Se encuentra en riesgo de marginación si no se aplican dinámicas de refuerzo social.",
+                badges: ["Situación de Aislamiento", "Baja Autoestima", "Requiere Integración"]
+            },
+            pablo: {
+                title: "Pablo (Educador / Protagonista)",
+                desc: "Recibe rechazos de docentes noveles al bloquear el debate. Busca la proximidad con Elena para afianzar su posición frente a la dirección.",
+                badges: ["Rechazo Laboral Parcial", "Búsqueda de Protagonismo", "Estructura Informal"]
+            }
+        };
+
+        // Dark Mode & Navigation Functions
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            if (content) {
+                content.classList.toggle('hidden');
+            }
+            if (icon) {
+                icon.classList.toggle('rotate-180');
+            }
+        }
+
+        function filterContent() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('.searchable-section');
+            
+            sections.forEach(sec => {
+                const text = sec.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    sec.style.display = '';
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+        }
+
         function openPhaseExample(phaseKey) {
             const data = phaseExamples[phaseKey];
+            if (!data) return;
             document.getElementById('phaseModalBadge').textContent = data.badge;
             document.getElementById('phaseModalTitle').textContent = data.title;
             document.getElementById('phaseModalContent').innerHTML = data.content;
@@ -813,54 +912,11 @@ comunicación es unidireccional y se observa una clara falta de cohesión en el 
             document.getElementById('phaseModal').classList.add('hidden');
         }
 
-        // Role Modal Dialog Data
-        const roleData = {
-            marta: {
-                title: "Marta — Liderazgo Democrático",
-                dialog: `
-                    <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                        <strong class="text-emerald-700 dark:text-emerald-300 block mb-1">Intervención típica en reunión:</strong>
-                        <p class="italic">"Bienvenidas a la sesión. Revisemos el orden del día. Lucía, me gustaría mucho conocer tu punto de vista sobre las metodologías innovadoras para este trimestre."</p>
-                    </div>
-                    <p class="text-xs text-slate-500">Marta busca construir consensos participativos y promover una estructura horizontal.</p>
-                `
-            },
-            elena: {
-                title: "Elena — Rol de Ataque y Autocrático",
-                dialog: `
-                    <div class="p-3 bg-rose-50 dark:bg-rose-950/40 rounded-lg border border-rose-200 dark:border-rose-800">
-                        <strong class="text-rose-700 dark:text-rose-300 block mb-1">Intervención típica en reunión:</strong>
-                        <p class="italic">"Llevo 15 años en este centro y sé perfectamente lo que funciona. Las ideas que traéis de la facultad no sirven en la realidad. Aquí se hará lo que yo diga."</p>
-                    </div>
-                    <p class="text-xs text-slate-500">Elena invalida al personal joven y bloquea el trabajo colaborativo pretendiendo imponer su autoridad por antigüedad.</p>
-                `
-            },
-            lucia: {
-                title: "Lucía — Rol Pasivo e Inhibido",
-                dialog: `
-                    <div class="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-lg border border-amber-200 dark:border-amber-800">
-                        <strong class="text-amber-700 dark:text-amber-300 block mb-1">Estado en reunión:</strong>
-                        <p class="italic">(Permanece en silencio continuo con la mirada baja)... "Prefiero no opinar, seguro que las veteranas saben más que yo."</p>
-                    </div>
-                    <p class="text-xs text-slate-500">Lucía cae en frustración y escuchas pasivas por temor al rechazo de Elena.</p>
-                `
-            },
-            pablo: {
-                title: "Pablo — Búsqueda de Reconocimiento",
-                dialog: `
-                    <div class="p-3 bg-violet-50 dark:bg-violet-950/40 rounded-lg border border-violet-200 dark:border-violet-800">
-                        <strong class="text-violet-700 dark:text-violet-300 block mb-1">Intervención típica en reunión:</strong>
-                        <p class="italic">"Antes de seguir, quiero remarcar que ayer me quedé hasta las 8 preparando los informes de evaluación. La dirección sabe bien la carga que asumo."</p>
-                    </div>
-                    <p class="text-xs text-slate-500">Pablo busca protagonismo individual continuo sin aportar a la resolución técnica del problema.</p>
-                `
-            }
-        };
-
         function openRoleModal(roleKey) {
-            const data = roleData[roleKey];
-            document.getElementById('modalName').textContent = data.title;
-            document.getElementById('modalContent').innerHTML = data.dialog;
+            const data = roleSimulations[roleKey];
+            if (!data) return;
+            document.getElementById('modalName').textContent = data.name;
+            document.getElementById('modalContent').innerHTML = data.content;
             document.getElementById('roleModal').classList.remove('hidden');
         }
 
@@ -876,77 +932,45 @@ comunicación es unidireccional y se observa una clara falta de cohesión en el 
             document.getElementById('overviewModal').classList.add('hidden');
         }
 
-        // Timer Simulation Logic
+        function selectSociogramNode(nodeKey) {
+            const data = sociogramData[nodeKey];
+            if (!data) return;
+            document.getElementById('socTitle').textContent = data.title;
+            document.getElementById('socDesc').textContent = data.desc;
+            
+            const badgesContainer = document.getElementById('socBadges');
+            badgesContainer.innerHTML = data.badges.map(b => `
+                <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-coral-100 text-coral-800 dark:bg-coral-950 dark:text-coral-300 border border-coral-300 dark:border-coral-800">${b}</span>
+            `).join('');
+        }
+
+        // Timer controller for simulation
         let timerInterval = null;
-        let timeRemaining = 3600; // 60 mins in seconds
-        let isTimerRunning = false;
+        let timerSeconds = 3600;
 
         function toggleTimer() {
             const btn = document.getElementById('timerBtn');
-            if (isTimerRunning) {
+            const display = document.getElementById('timerDisplay');
+            
+            if (timerInterval) {
                 clearInterval(timerInterval);
-                isTimerRunning = false;
+                timerInterval = null;
                 btn.textContent = "Reanudar";
-                btn.classList.replace('bg-rose-500', 'bg-coral-500');
             } else {
-                isTimerRunning = true;
                 btn.textContent = "Pausar";
-                btn.classList.replace('bg-coral-500', 'bg-rose-500');
                 timerInterval = setInterval(() => {
-                    if (timeRemaining > 0) {
-                        timeRemaining--;
-                        updateTimerDisplay();
-                    } else {
+                    if (timerSeconds <= 0) {
                         clearInterval(timerInterval);
+                        timerInterval = null;
+                        btn.textContent = "Finalizado";
+                        return;
                     }
+                    timerSeconds--;
+                    const mins = Math.floor(timerSeconds / 60);
+                    const secs = timerSeconds % 60;
+                    display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 }, 1000);
             }
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
-            document.getElementById('timerDisplay').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        // Sociogram Node Selection Details
-        const sociogramInfo = {
-            marta: {
-                title: "Marta (Líder Formal)",
-                desc: "Recibe elecciones unilaterales continuas para tareas organizativas. Su liderazgo formal no obstante choca con el poder fáctico ejercido por Elena en la estructura informal.",
-                badges: ["Elección Tarea: Alta", "Rechazo Afectivo: Nulo", "Función: Moderadora"]
-            },
-            elena: {
-                title: "Elena (Poder Informal Negativo)",
-                desc: "Acumula rechazos manifiestos en la dimensión relacional/afectiva por su actitud autocrática. Genera un foco de presión e inhibición en los integrantes nuevos.",
-                badges: ["Rechazo Relacional: Alto", "Subgrupo: Alineada con Pablo", "Función: Ataque"]
-            },
-            lucia: {
-                title: "Lucía (Posición Aislada)",
-                desc: "No recibe elecciones activas por su inhibición. Se encuentra en riesgo de marginación pasiva al reprimir sus competencias docentes por miedo a Elena.",
-                badges: ["Estatus: Aislada", "Elección Recibida: Baja", "Intervención Urgente"]
-            },
-            pablo: {
-                title: "Pablo (Búsqueda de Protagonismo)",
-                desc: "Interacciones enfocadas a evidenciar presencia. Provoca cierta saturación y distancia afectiva en sus compañeras de ciclo.",
-                badges: ["Estatus: Periférico", "Rechazo Tarea: Moderado", "Busca Reconocimiento"]
-            }
-        };
-
-        function selectSociogramNode(nodeKey) {
-            const info = sociogramInfo[nodeKey];
-            document.getElementById('socTitle').textContent = info.title;
-            document.getElementById('socDesc').textContent = info.desc;
-            
-            const badgesContainer = document.getElementById('socBadges');
-            badgesContainer.innerHTML = '';
-            info.badges.forEach(b => {
-                const badge = document.createElement('span');
-                badge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-coral-100 dark:bg-coral-900/50 text-coral-700 dark:text-coral-300';
-                badge.textContent = b;
-                badgesContainer.appendChild(badge);
-            });
         }
     </script>
 </body>

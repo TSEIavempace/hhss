@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tarea 2 - Resolución del Caso Práctico</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 11pt;
+                color: #555555;
+            }
+        }
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #2b2b2b;
+            text-align: justify;
+            margin: 0;
+            padding: 0;
+            background-color: #faf9f6;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* Portada */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            min-height: 25cm;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 1.5cm 1cm;
+            background: linear-gradient(135deg, #fffcf9 0%, #f7f0eb 100%);
+            border: 1px solid #e2d9d0;
+            border-radius: 8px;
+        }
+
+        .cover-header h3 {
+            font-size: 14pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.2cm;
+            font-weight: bold;
+            color: #8c4331;
+        }
+
+        .cover-header h4 {
+            font-size: 12pt;
+            font-weight: normal;
+            color: #555555;
+            margin: 0;
+        }
+
+        .cover-title {
+            margin: 1.5cm 0;
+        }
+
+        .cover-title h1 {
+            font-size: 18pt;
+            font-weight: bold;
+            line-height: 1.3;
+            margin-bottom: 0.4cm;
+            text-transform: uppercase;
+            color: #1a1a1a;
+        }
+
+        .cover-title h2 {
+            font-size: 12.5pt;
+            font-weight: normal;
+            font-style: italic;
+            color: #5c554e;
+            margin: 0;
+        }
+
+        .cover-illustration {
+            margin: 0.3cm auto;
+            text-align: center;
+        }
+
+        .cover-footer {
+            margin-bottom: 0.2cm;
+            text-align: left;
+            display: inline-block;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #d97757;
+            box-sizing: border-box;
+        }
+
+        .cover-footer table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cover-footer td {
+            padding: 3px 0;
+            font-size: 11pt;
+        }
+
+        .cover-footer td.label {
+            font-weight: bold;
+            width: 35%;
+            color: #4a3e3d;
+        }
+
+        /* Headers & Secciones */
+        .section-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 2px solid #d97757;
+            margin-top: 0.5cm;
+            margin-bottom: 0.25cm;
+            padding-bottom: 2px;
+        }
+
+        h1.section-title {
+            font-size: 13pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+            color: #8c4331;
+            border: none;
+            padding: 0;
+        }
+
+        .back-to-index {
+            font-size: 9.5pt;
+            font-family: sans-serif;
+            color: #d97757;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .back-to-index:hover {
+            text-decoration: underline;
+            color: #8c4331;
+        }
+
+        .subsection-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 0.2cm;
+            margin-bottom: 0.1cm;
+        }
+
+        h2.subsection-title {
+            font-size: 12pt;
+            font-weight: bold;
+            margin: 0;
+            color: #333333;
+        }
+
+        /* Cards */
+        .card {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin-bottom: 0.25cm;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            border-left: 3px solid #e8b4a2;
+        }
+
+        .card-accent {
+            background-color: #fcf8f5;
+            border-left-color: #d97757;
+        }
+
+        /* Índice */
+        .index-container {
+            margin-top: 0.4cm;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ebe5df;
+        }
+
+        .index-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.22cm;
+            font-size: 11pt;
+        }
+
+        .index-item a {
+            color: #2b2b2b;
+            text-decoration: none;
+        }
+
+        .index-item a:hover {
+            color: #d97757;
+            text-decoration: underline;
+        }
+
+        .index-item .dots {
+            flex-grow: 1;
+            border-bottom: 1px dotted #a89f91;
+            margin: 0 6px;
+            position: relative;
+            bottom: 4px;
+        }
+
+        .index-page-num {
+            font-weight: bold;
+            color: #8c4331;
+        }
+
+        /* Listas y Formatos */
+        ul {
+            margin-top: 0.1cm;
+            margin-bottom: 0.2cm;
+            padding-left: 0.8cm;
+        }
+
+        li {
+            margin-bottom: 0.1cm;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 0.2cm;
+            text-indent: 0.5cm;
+            font-size: 12pt;
+            line-height: 1.5;
+        }
+
+        p.no-indent {
+            text-indent: 0;
+        }
+
+        .section-graphic {
+            text-align: center;
+            margin: 0.2cm 0;
+        }
+
+        .section-graphic svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Tabla */
+        table.tech-sheet {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.2cm;
+            margin-bottom: 0.3cm;
+            font-size: 10.5pt;
+            line-height: 1.3;
+            background-color: #ffffff;
+        }
+
+        table.tech-sheet th, table.tech-sheet td {
+            border: 1px solid #dcd3cb;
+            padding: 5px 8px;
+            vertical-align: top;
+            text-align: justify;
+        }
+
+        table.tech-sheet th {
+            background-color: #f3ded7;
+            color: #5c2418;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        table.tech-sheet td.col-header {
+            font-weight: bold;
+            width: 26%;
+            background-color: #fbf7f4;
+            color: #4a3e3d;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .doc-footer {
+            margin-top: 0.4cm;
+            padding-top: 4px;
+            border-top: 1px solid #e0d8d0;
+            font-size: 9pt;
+            color: #777777;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PÁGINA 1: PORTADA -->
+    <div class="cover-page page-break">
+        <div class="cover-header">
+            <h3>Instituto de Educación Secundaria Avempace</h3>
+            <h4>Módulo Profesional: Habilidades Sociales</h4>
+        </div>
+
+        <div class="cover-title">
+            <h1>Resolución del Caso Práctico</h1>
+            <h2>Análisis de Dinámicas, Roles y Cohesión en el Equipo Educativo</h2>
+        </div>
+
+        <div class="cover-illustration">
+            <svg width="150" height="65" viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="40" r="22" fill="#e8b4a2" opacity="0.8"/>
+                <circle cx="100" cy="30" r="26" fill="#d97757" opacity="0.9"/>
+                <circle cx="140" cy="40" r="22" fill="#f0c2b2" opacity="0.8"/>
+                <path d="M30 85 C30 65, 90 65, 90 85" stroke="#8c4331" stroke-width="3" fill="none"/>
+                <path d="M70 85 C70 58, 130 58, 130 85" stroke="#5c2418" stroke-width="4" fill="none"/>
+                <path d="M110 85 C110 65, 170 65, 170 85" stroke="#8c4331" stroke-width="3" fill="none"/>
+            </svg>
+        </div>
+
+        <div class="cover-footer">
+            <table>
+                <tr>
+                    <td class="label">Autora:</td>
+                    <td>Ana Maria da Cunha Goncalves</td>
+                </tr>
+                <tr>
+                    <td class="label">Profesora:</td>
+                    <td>Rosa Maria Vitaller Cebrián</td>
+                </tr>
+                <tr>
+                    <td class="label">Módulo Formativo:</td>
+                    <td>Habilidades Sociales</td>
+                </tr>
+                <tr>
+                    <td class="label">Centro Educativo:</td>
+                    <td>IES Avempace</td>
+                </tr>
+                <tr>
+                    <td class="label">Fecha de realización:</td>
+                    <td id="auto-date">Cargando fecha...</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PÁGINA 2: ÍNDICE Y SECCIÓN 1 Y 2 -->
+    <div class="page-break">
+        <div class="index-container" id="indice">
+            <div class="section-header-flex" style="margin-top:0;">
+                <h1 class="section-title">Índice Numerado</h1>
+            </div>
+            
+            <div class="index-item">
+                <span><a href="#sec1"><strong>1. Roles Grupales y Estilos de Liderazgo</strong></a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec1-1">1.1. Marta: Estilo Democrático / Rol Coordinador</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec1-2">1.2. Elena: Rol de Ataque y Autocrático</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec1-3">1.3. Lucía: Rol Pasivo</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec1-4">1.4. Pablo: Rol en Búsqueda de Reconocimiento</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+
+            <div class="index-item" style="margin-top: 0.2cm;">
+                <span><a href="#sec2"><strong>2. Cohesión Grupal y Análisis de Dinámicas</strong></a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec2-1">2.1. Nivel de Cohesión Existente</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec2-2">2.2. Factores de Disgregación</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec2-3">2.3. Estrategia Organizativa de Mejora</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">2</span>
+            </div>
+
+            <div class="index-item" style="margin-top: 0.2cm;">
+                <span><a href="#sec3"><strong>3. Ficha Técnica de Intervención Grupal</strong></a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">3</span>
+            </div>
+
+            <div class="index-item" style="margin-top: 0.2cm;">
+                <span><a href="#sec4"><strong>4. Diagnóstico Sociométrico del Equipo Profesional</strong></a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">4</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec4-1">4.1. Formulación de Preguntas</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">4</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec4-2">4.2. Tabulación y Matriz Sociométrica</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">4</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec4-3">4.3. Confección del Sociograma Gráfico</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">4</span>
+            </div>
+            <div class="index-item" style="padding-left: 0.4cm;">
+                <span><a href="#sec4-4">4.4. Análisis e Interpretación Diagnóstica</a></span>
+                <span class="dots"></span>
+                <span class="index-page-num">4</span>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1 -->
+        <div class="section-header-flex" id="sec1">
+            <h1 class="section-title">1. Roles Grupales y Estilos de Liderazgo</h1>
+            <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+        </div>
+        
+        <div class="card" id="sec1-1">
+            <p class="no-indent"><span class="bold">1.1. Marta (Liderazgo Democrático / Coordinadora-Moderadora):</span> Promueve un ambiente horizontal y cordial. Presenta el orden del día, estimula la participación de todas las educadoras y busca consensuar cada decisión respetando los turnos de palabra.</p>
+        </div>
+        <div class="card" id="sec1-2">
+            <p class="no-indent"><span class="bold">1.2. Elena (Rol de Ataque y Liderazgo Autocrático):</span> Actúa desde la rivalidad e invalida las ideas del personal más joven. Su actitud impositiva basada en la antigüedad genera crispación y desmotivación en la dinámica grupal.</p>
+        </div>
+        <div class="card" id="sec1-3">
+            <p class="no-indent"><span class="bold">1.3. Lucía (Rol Pasivo e Inhibido):</span> Se mantiene en un plano de sumisión y silencio permanente por sentirse inexperta, reprimiendo sus valiosas aportaciones profesionales por miedo al rechazo de Elena.</p>
+        </div>
+        <div class="card" id="sec1-4">
+            <p class="no-indent"><span class="bold">1.4. Pablo (Búsqueda de Reconocimiento):</span> Interviene reiteradamente para destacar su carga laboral e impresionar a la dirección, interrumpiendo el flujo del debate pedagógico y provocando cansancio en el equipo.</p>
+        </div>
+
+        <!-- SECCIÓN 2 -->
+        <div class="section-header-flex" id="sec2">
+            <h1 class="section-title">2. Cohesión Grupal y Análisis de Dinámicas</h1>
+            <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+        </div>
+
+        <div class="card card-accent" id="sec2-1">
+            <div class="subsection-header-flex">
+                <h2 class="subsection-title">2.1. Nivel de Cohesión Existente</h2>
+                <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+            </div>
+            <p class="no-indent">La cohesión del equipo es baja y tiende a la disgregación. No se percibe sentimiento de pertenencia común ("nosotros"), viéndose frustrados los avances del grupo por falta de acuerdos claros y una comunicación distorsionada.</p>
+        </div>
+
+        <div class="card" id="sec2-2">
+            <div class="subsection-header-flex">
+                <h2 class="subsection-title">2.2. Factores de Disgregación</h2>
+                <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+            </div>
+            <p class="no-indent"><span class="bold">A. Factores Internos:</span> Tensiones afectivas motivadas por actitudes autoritarias (Elena), inhibidas (Lucía) y afán de protagonismo (Pablo), junto con un flujo comunicativo de oposición y egocentrismo.</p>
+            <p class="no-indent"><span class="bold">B. Factores Externos:</span> Jerarquización informal rígida basada erróneamente en los años de experiencia, bloqueando la innovación.</p>
+        </div>
+
+        <div class="card card-accent" id="sec2-3">
+            <div class="subsection-header-flex">
+                <h2 class="subsection-title">2.3. Estrategia Organizativa de Mejora</h2>
+                <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+            </div>
+            <p class="no-indent">Apostar por una <span class="bold">estructura horizontal colaborativa</span> regularizando formalmente las intervenciones en reunión, validando públicamente las propuestas de las nuevas educadoras y orientando los objetivos al trabajo en equipo cooperativo.</p>
+        </div>
+
+        <div class="doc-footer">
+            <span>Tarea 2 - Habilidades Sociales</span>
+            <span>Ana Maria da Cunha Goncalves</span>
+        </div>
+    </div>
+
+    <!-- PÁGINA 3: FICHA TÉCNICA -->
+    <div class="page-break">
+        <div class="section-header-flex" id="sec3" style="margin-top:0;">
+            <h1 class="section-title">3. Ficha Técnica de Intervención Grupal</h1>
+            <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+        </div>
+
+        <div class="section-graphic">
+            <svg width="160" height="32" viewBox="0 0 200 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="22" r="14" fill="#d97757" opacity="0.8"/>
+                <circle cx="140" cy="22" r="14" fill="#e8b4a2" opacity="0.8"/>
+                <path d="M 74 22 Q 100 10 126 22" stroke="#8c4331" stroke-width="2" fill="none" stroke-dasharray="3,3"/>
+                <path d="M 126 22 Q 100 34 74 22" stroke="#8c4331" stroke-width="2" fill="none" stroke-dasharray="3,3"/>
+                <text x="100" y="8" font-size="8" text-anchor="middle" fill="#5c2418" font-family="sans-serif">Role-Playing (Empatía)</text>
+            </svg>
+        </div>
+
+        <table class="tech-sheet">
+            <thead>
+                <tr>
+                    <th style="width: 26%;">Apartado</th>
+                    <th>Descripción y Contenido</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-header">Título</td>
+                    <td><span class="bold">"Cambiando de Zapatos: Roles y Empatía en el Aula Infantil"</span></td>
+                </tr>
+                <tr>
+                    <td class="col-header">Clasificación</td>
+                    <td>Técnica de análisis de grupo / Resolución de conflictos mediante Juego de Rol (<i>Role-Playing</i>).</td>
+                </tr>
+                <tr>
+                    <td class="col-header">Destinatarios</td>
+                    <td>Equipo docente del ciclo de Educación Infantil (Marta, Elena, Lucía, Pablo y dinamizador/a).</td>
+                </tr>
+                <tr>
+                    <td class="col-header">Objetivos</td>
+                    <td>
+                        1. Fomentar la empatía poniéndose en la postura de las compañeras.<br>
+                        2. Tomar conciencia del impacto negativo de los roles disfuncionales.<br>
+                        3. Practicar habilidades de comunicación asertiva y escucha activa.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-header">Desarrollo Sintético (60 min)</td>
+                    <td>
+                        <span class="bold">• Planteamiento (10 min):</span> Exposición del conflicto ficticio sobre innovación vs. experiencia.<br>
+                        <span class="bold">• Asignación de Roles (10 min):</span> Inversión de papeles (Elena asume el rol novel; Lucía el de veterana; Pablo el de mediador neutro; Marta observa).<br>
+                        <span class="bold">• Dramatización (15 min):</span> Escenificación vivencial sin guion previo.<br>
+                        <span class="bold">• Debate final (25 min):</span> Puesta en común de sensaciones percibidas y extracción de compromisos de mejora grupal.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-header">Recursos</td>
+                    <td>
+                        <span class="bold">• Espacio y Materiales:</span> Sala polivalente organizada en círculo, tarjetas descriptivas de roles y hojas de observación.<br>
+                        <span class="bold">• Personal:</span> Técnico/a Superior en Educación Infantil actuando como moderador/a.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-header">Variantes / Observaciones</td>
+                    <td>
+                        <span class="bold">• Variante:</span> Cuchicheo previo en parejas si se detecta timidez inicial.<br>
+                        <span class="bold">• Observación:</span> Garantizar un espacio seguro libre de juicios dirigidos a la persona.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="doc-footer">
+            <span>Tarea 2 - Habilidades Sociales</span>
+            <span>Ana Maria da Cunha Goncalves</span>
+        </div>
+    </div>
+
+    <!-- PÁGINA 4: DIAGNÓSTICO SOCIOMÉTRICO -->
+    <div>
+        <div class="section-header-flex" id="sec4" style="margin-top:0;">
+            <h1 class="section-title">4. Diagnóstico Sociométrico del Equipo Profesional</h1>
+            <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+        </div>
+        
+        <div class="section-graphic">
+            <svg width="180" height="40" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="30" r="12" fill="#e8b4a2"/>
+                <text x="40" y="33" font-size="8" text-anchor="middle" fill="#fff" font-weight="bold">M</text>
+                <circle cx="110" cy="15" r="12" fill="#d97757"/>
+                <text x="110" y="18" font-size="8" text-anchor="middle" fill="#fff" font-weight="bold">E</text>
+                <circle cx="180" cy="30" r="12" fill="#e8b4a2"/>
+                <text x="180" y="33" font-size="8" text-anchor="middle" fill="#fff" font-weight="bold">L</text>
+                <circle cx="110" cy="45" r="12" fill="#d97757"/>
+                <text x="110" y="48" font-size="8" text-anchor="middle" fill="#fff" font-weight="bold">P</text>
+                <line x1="52" y1="26" x2="98" y2="18" stroke="#8c4331" stroke-width="1.5" stroke-dasharray="3,3"/>
+                <line x1="122" y1="18" x2="168" y2="26" stroke="#c0392b" stroke-width="1.5"/>
+                <line x1="52" y1="34" x2="98" y2="42" stroke="#8c4331" stroke-width="1.5"/>
+            </svg>
+        </div>
+
+        <p class="no-indent">Propuesta para diagnosticar la estructura relacional e informal del grupo profesional a través de un <span class="bold">Sociograma</span>:</p>
+
+        <div class="card" id="sec4-1">
+            <div class="subsection-header-flex">
+                <span class="bold">4.1. Formulación de Preguntas</span>
+                <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+            </div>
+            <p class="no-indent">Pasa de forma confidencial preguntas de elección y rechazo en dos dimensiones:</p>
+            <ul>
+                <li><span class="bold">Laboral/Tarea:</span> Elección y rechazo de un compañero para coordinar proyectos.</li>
+                <li><span class="bold">Afectiva/Relacional:</span> Preferencia de interacción en tiempos de descanso.</li>
+            </ul>
+        </div>
+
+        <div class="card" id="sec4-2">
+            <div class="subsection-header-flex">
+                <span class="bold">4.2. Tabulación y Matriz Sociométrica</span>
+                <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+            </div>
+            <p class="no-indent">Organización de las respuestas mediante una matriz de doble entrada registrando las interacciones elegidas o rechazadas entre Marta, Elena, Lucía y Pablo.</p>
+        </div>
+
+        <div class="card" id="sec4-3">
+            <div class="subsection-header-flex">
+                <span class="bold">4.3. Confección del Sociograma Gráfico</span>
+                <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+            </div>
+            <p class="no-indent">Traducción gráfica utilizando flechas unidireccionales (elecciones sencillas), bidireccionales (elecciones recíprocas) y discontinuas/rojas (rechazos expresos).</p>
+        </div>
+
+        <div class="card card-accent" id="sec4-4">
+            <div class="subsection-header-flex">
+                <span class="bold">4.4. Análisis e Interpretación Diagnóstica</span>
+                <a href="#indice" class="back-to-index">[↑ Volver al Índice]</a>
+            </div>
+            <ul>
+                <li><span class="bold">Visión Global:</span> Determina la cohesión y grado de división interna del equipo.</li>
+                <li><span class="bold">Posición de Integrantes:</span> Contrasta el liderazgo formal (Marta) frente al de influencia negativa (Elena), evaluando situaciones de aislamiento (Lucía) o rechazo (Pablo/Elena).</li>
+            </ul>
+        </div>
+
+        <div class="doc-footer">
+            <span>Tarea 2 - Habilidades Sociales</span>
+            <span>Ana Maria da Cunha Goncalves</span>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE FECHA DINÁMICA MEJORADO -->
+    <script>
+        (function() {
+            function actualizarFecha() {
+                var fecha = new Date();
+                var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                var mes = meses[fecha.getMonth()];
+                var ano = fecha.getFullYear();
+                var elemento = document.getElementById("auto-date");
+                if (elemento) {
+                    elemento.textContent = mes + " " + ano;
+                }
+            }
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", actualizarFecha);
+            } else {
+                actualizarFecha();
+            }
+        })();
+    </script>
+</body>
+</html>

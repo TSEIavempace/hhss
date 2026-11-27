@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen Tipo Test · Habilidades Sociales, Comunicación y Dinámicas de Grupo</title>
+  <!-- Fuente Inter para una lectura académica clara -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Barra superior fija con progreso y controles rápidos -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Título corto y contador -->
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+            40
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-sm sm:text-base font-bold text-slate-900 truncate">
+              Habilidades Sociales y Dinámicas de Grupo
+            </h1>
+            <p class="text-xs text-slate-500">
+              Respondidas: <span id="answered-count" class="font-semibold text-indigo-600">0</span> / 40
+              <span class="hidden sm:inline"> · 3 errores restan 1 acierto · Máx. 100 pts</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Controles de acción en la barra superior -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <label class="inline-flex items-center gap-2 text-xs sm:text-sm text-slate-600 bg-slate-100 hover:bg-slate-200/80 px-3 py-2 rounded-xl cursor-pointer transition select-none">
+            <input id="shuffle-toggle" type="checkbox" checked class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300" />
+            <span class="font-medium">Barajar al reiniciar</span>
+          </label>
+
+          <button
+            id="header-submit-btn"
+            type="button"
+            class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold shadow-sm transition"
+          >
+            Corregir examen
+          </button>
+
+          <button
+            id="header-restart-btn"
+            type="button"
+            class="hidden px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold shadow-sm transition"
+          >
+            Repetir examen
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de progreso visual -->
+      <div class="mt-3 w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+        <div
+          id="progress-bar"
+          class="bg-indigo-600 h-2 rounded-full transition-all duration-300 ease-out"
+          style="width: 0%"
+        ></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- Tarjeta informativa inicial sobre reglas de puntuación -->
+    <section id="intro-banner" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 mb-2">
+            Examen tipo test interactivo
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+            Habilidades Sociales, Comunicación y Dinámicas de Grupo
+          </h2>
+          <p class="text-sm text-slate-600 mt-1.5 leading-relaxed">
+            Consta de <strong>40 preguntas</strong> con 4 opciones de respuesta. Cada acierto suma <strong>2,50 puntos</strong> (máximo 100). Por cada <strong>3 errores se resta 1 acierto</strong> (&minus;0,83 puntos por error). Las preguntas en blanco no penalizan; puedes desmarcar una opción haciendo clic de nuevo sobre ella o pulsando <em>Dejar en blanco</em>.
+          </p>
+        </div>
+        <div class="shrink-0 flex sm:flex-col gap-2">
+          <button
+            id="shuffle-now-btn"
+            type="button"
+            class="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2"
+            title="Barajar el orden de preguntas y opciones ahora"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Barajar ahora
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel resumen de resultados (visible solo tras corregir) -->
+    <section id="results-panel" class="hidden bg-white rounded-2xl border border-slate-200 shadow-md p-5 sm:p-8 mb-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <span id="status-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+              <!-- Aprobado / Suspenso -->
+            </span>
+            <span class="text-xs font-medium text-slate-500">Corrección completada</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Resultado del examen
+          </h2>
+          <p id="result-message" class="text-sm text-slate-600 mt-1">
+            <!-- Mensaje dinámico -->
+          </p>
+        </div>
+
+        <!-- Caja de puntuaciones principales -->
+        <div class="flex items-center gap-4">
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-center min-w-[130px]">
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Sobre 100</div>
+            <div id="score-100" class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">0,00</div>
+            <div class="text-xs text-slate-500 mt-0.5">de 100 pts</div>
+          </div>
+          <div class="bg-indigo-50 border border-indigo-200 rounded-2xl px-5 py-4 text-center min-w-[115px]">
+            <div class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Sobre 10</div>
+            <div id="score-10" class="text-3xl sm:text-4xl font-extrabold text-indigo-700 mt-1">0,00</div>
+            <div class="text-xs text-indigo-500 mt-0.5">nota final</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desglose estadístico -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6">
+        <div class="rounded-xl bg-emerald-50 border border-emerald-200 p-4">
+          <div class="text-xs font-semibold text-emerald-700 uppercase">Aciertos</div>
+          <div id="stat-correct" class="text-2xl font-extrabold text-emerald-800 mt-1">0</div>
+          <div id="stat-correct-pts" class="text-xs text-emerald-700/80 mt-0.5">+0,00 pts</div>
+        </div>
+        <div class="rounded-xl bg-rose-50 border border-rose-200 p-4">
+          <div class="text-xs font-semibold text-rose-700 uppercase">Errores</div>
+          <div id="stat-wrong" class="text-2xl font-extrabold text-rose-800 mt-1">0</div>
+          <div class="text-xs text-rose-700/80 mt-0.5">3 errores = &minus;1 acierto</div>
+        </div>
+        <div class="rounded-xl bg-slate-100 border border-slate-200 p-4">
+          <div class="text-xs font-semibold text-slate-600 uppercase">En blanco</div>
+          <div id="stat-blank" class="text-2xl font-extrabold text-slate-800 mt-1">0</div>
+          <div class="text-xs text-slate-500 mt-0.5">Sin penalización</div>
+        </div>
+        <div class="rounded-xl bg-amber-50 border border-amber-200 p-4">
+          <div class="text-xs font-semibold text-amber-800 uppercase">Penalización</div>
+          <div id="stat-penalty-pts" class="text-2xl font-extrabold text-amber-900 mt-1">&minus;0,00 pts</div>
+          <div id="stat-penalty-net" class="text-xs text-amber-800/80 mt-0.5">0,00 aciertos restados</div>
+        </div>
+      </div>
+
+      <!-- Detalle de fórmula aplicada y botón repetir -->
+      <div class="mt-6 pt-5 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <p id="formula-detail" class="text-xs sm:text-sm text-slate-600">
+          <!-- Fórmula detallada -->
+        </p>
+        <button
+          id="results-restart-btn"
+          type="button"
+          class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition shrink-0"
+        >
+          Repetir examen
+        </button>
+      </div>
+
+      <!-- Barra de filtros para la revisión -->
+      <div class="mt-6 pt-5 border-t border-slate-200">
+        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
+          Filtrar revisión de preguntas
+        </div>
+        <div id="filter-buttons" class="flex flex-wrap gap-2">
+          <button type="button" data-filter="all" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition">
+            Todas (<span id="count-all">40</span>)
+          </button>
+          <button type="button" data-filter="wrong" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition">
+            Falladas (<span id="count-wrong">0</span>)
+          </button>
+          <button type="button" data-filter="correct" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition">
+            Acertadas (<span id="count-correct">0</span>)
+          </button>
+          <button type="button" data-filter="blank" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition">
+            En blanco (<span id="count-blank">0</span>)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mensaje cuando un filtro no tiene preguntas -->
+    <div id="empty-filter-msg" class="hidden bg-white rounded-2xl border border-slate-200 p-8 text-center mb-6">
+      <p class="text-slate-600 font-medium">No hay preguntas en esta categoría.</p>
+    </div>
+
+    <!-- Contenedor dinámico de las 40 preguntas -->
+    <form id="exam-container" class="space-y-5" novalidate>
+      <!-- Renderizado por JavaScript -->
+    </form>
+
+    <!-- Botón inferior para corregir el examen -->
+    <div id="bottom-actions" class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+      <div class="text-sm text-slate-600 text-center sm:text-left">
+        Has contestado <strong id="bottom-answered-count" class="text-indigo-600">0</strong> de <strong>40</strong> preguntas.
+      </div>
+      <button
+        id="bottom-submit-btn"
+        type="button"
+        class="w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-semibold text-sm shadow-sm transition"
+      >
+        Corregir examen y ver puntuación
+      </button>
+    </div>
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="border-t border-slate-200 bg-white mt-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 text-center text-xs text-slate-500">
+      Examen Tipo Test Interactivo · Habilidades Sociales, Comunicación y Dinámicas de Grupo · 40 Preguntas
+    </div>
+  </footer>
+
+  <!-- Modal personalizado de confirmación (reemplaza confirm() nativo) -->
+  <div
+    id="confirm-modal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 id="modal-title" class="text-lg font-bold text-slate-900">
+            ¿Corregir el examen ahora?
+          </h3>
+          <p id="modal-description" class="text-sm text-slate-600 mt-1.5 leading-relaxed">
+            <!-- Texto dinámico -->
+          </p>
+        </div>
+      </div>
+      <div class="mt-6 flex flex-col-reverse sm:flex-row justify-end gap-2.5">
+        <button
+          id="modal-cancel-btn"
+          type="button"
+          class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition"
+        >
+          Seguir respondiendo
+        </button>
+        <button
+          id="modal-confirm-btn"
+          type="button"
+          class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition"
+        >
+          Sí, corregir ahora
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lógica de la aplicación -->
+  <script>
+    /**
+     * Banco completo de las 40 preguntas oficiales del examen.
+     * Las opciones se barajan al renderizar para que la respuesta correcta
+     * no ocupe siempre la misma posición.
+     */
+    const QUESTIONS_BANK = [
+      {
+        id: 1,
+        question: "Una educadora infantil experimenta una fuerte ansiedad antes de una tutoría al anticipar que las familias la juzgarán negativamente. Según la triple dimensión de la habilidad social, ¿en qué dimensión se encuadran estas variables?",
+        correct: "Dimensión personal.",
+        distractors: ["Dimensión conductual.", "Dimensión situacional.", "Dimensión interpersonal."],
+        explanation: "La dimensión personal engloba las variables cognitivas y afectivas del sujeto, como creencias, expectativas y nivel de activación emocional."
+      },
+      {
+        id: 2,
+        question: "En el aula infantil, un niño percibe que un compañero lo ha empujado accidentalmente en lugar de hacerlo con mala intención y decide proponerle jugar por turnos. ¿Qué dimensión de la competencia social demuestra principalmente?",
+        correct: "Área socio-cognitiva.",
+        distractors: ["Área socio-afectiva.", "Conducta social práctica.", "Autonomía personal e instrumental."],
+        explanation: "El área socio-cognitiva incluye el procesamiento de información social, la atribución de intenciones, la toma de perspectiva y la solución cognitiva de problemas."
+      },
+      {
+        id: 3,
+        question: "Durante una conversación profesional, la interlocutora experimenta una contracción pupilar involuntaria ante una propuesta. ¿Cómo se denomina este fenómeno fisiológico y qué estado suele reflejar?",
+        correct: "Miosis, asociada a rechazo u hostilidad.",
+        distractors: ["Midriasis, asociada a rechazo u hostilidad.", "Miosis, asociada a interés elevado o atracción.", "Midriasis, asociada a activación emocional positiva."],
+        explanation: "La contracción pupilar (miosis) es una respuesta involuntaria asociada a estados de rechazo, hostilidad o desinterés, frente a la dilatación (midriasis)."
+      },
+      {
+        id: 4,
+        question: "Una educadora necesita trasladar una observación crítica a una familia sobre el incumplimiento reiterado de los horarios y esboza una sonrisa para suavizar el impacto del mensaje. Según la tipología de Paul Ekman, ¿qué tipo de sonrisa emplea?",
+        correct: "Sonrisa mitigadora.",
+        distractors: ["Sonrisa amortiguada.", "Sonrisa auténtica (Duchenne).", "Sonrisa falsa o de acatamiento."],
+        explanation: "La sonrisa mitigadora se emplea para suavizar un mensaje crítico o desagradable y reducir la tensión en el interlocutor."
+      },
+      {
+        id: 5,
+        question: "Un profesional intenta disimular su enfado ante la propuesta de un compañero, pero su rostro delata inadvertidamente la emoción que pretende ocultar. ¿A qué estilo de expresión facial corresponde este comportamiento?",
+        correct: "Estilo involuntario.",
+        distractors: ["Estilo revelador.", "Estilo hermético.", "Estilo sofisticado o suplantado."],
+        explanation: "El estilo involuntario muestra inadvertidamente emociones que el sujeto está intentando ocultar activamente."
+      },
+      {
+        id: 6,
+        question: "Mientras expone un proyecto ante el equipo educativo, una técnica se toca el pelo repetidamente para descargar la tensión que le produce hablar en público. ¿Cómo clasifican Ekman y Friesen este tipo de movimiento?",
+        correct: "Gesto adaptador.",
+        distractors: ["Gesto emblema.", "Gesto ilustrador.", "Gesto regulador."],
+        explanation: "Los gestos adaptadores son movimientos utilizados para autorregular emociones, manejar la tensión o satisfacer necesidades corporales."
+      },
+      {
+        id: 7,
+        question: "Según la proxémica de E. T. Hall, ¿cuál es la zona espacial adecuada para desarrollar reuniones de trabajo, tramitaciones e intercambios profesionales impersonales?",
+        correct: "Zona social, entre 1,20 m y 3,65 m.",
+        distractors: ["Zona personal, entre 45 cm y 1,20 m.", "Zona pública, más de 3,65 m.", "Zona íntima, de 0 a 45 cm."],
+        explanation: "La zona social (1,20 m a 3,65 m) es la distancia empleada en reuniones de trabajo, tramitaciones e intercambios profesionales impersonales."
+      },
+      {
+        id: 8,
+        question: "En un intercambio verbal, un participante contesta de manera instantánea, sin dejar ninguna pausa tras finalizar su interlocutor. Según el análisis de los componentes paralingüísticos, ¿qué suele reflejar una latencia de respuesta nula?",
+        correct: "Impulsividad.",
+        distractors: ["Inseguridad.", "Monotonía.", "Falta de claridad de dicción."],
+        explanation: "Las latencias de respuesta excesivas sugieren inseguridad, mientras que las latencias nulas reflejan impulsividad."
+      },
+      {
+        id: 9,
+        question: "Una profesional de Educación Infantil evita expresar desacuerdos en el claustro guiada por el pensamiento absolutista «debo gustar y agradar siempre a todo el mundo». ¿A qué constructo cognitivo corresponde este patrón?",
+        correct: "Creencia irracional de Ellis.",
+        distractors: ["Expectativa de autoeficacia de Bandura.", "Esquema personal de Kendall.", "Autoinstrucción reguladora."],
+        explanation: "Las creencias irracionales de Ellis son pensamientos absolutistas que generan ansiedad social y dificultan la asertividad."
+      },
+      {
+        id: 10,
+        question: "Durante una tutoría, una madre expresa su angustia por el llanto de su hijo al entrar en la escuela. El educador la interrumpe de inmediato para relatar cómo él mismo pasó por algo parecido con su sobrino. ¿Qué obstáculo de la escucha activa se ha producido?",
+        correct: "Identificación o comparación.",
+        distractors: ["Paternalismo o asesoramiento.", "Lectura de pensamiento.", "Discrepancia impulsiva."],
+        explanation: "La identificación o comparación consiste en relacionar inmediatamente lo que dice el otro con las propias experiencias, desviando el foco de atención."
+      },
+      {
+        id: 11,
+        question: "En una reunión entre el centro educativo y una familia recién llegada de otro país, surgen malentendidos debido a las diferencias en las normas de cortesía y en los valores sobre la crianza. ¿Qué barrera comunicativa está interfiriendo?",
+        correct: "Barrera sociocultural.",
+        distractors: ["Barrera semántica.", "Barrera psicológica.", "Barrera fisiológica."],
+        explanation: "Las barreras socioculturales derivan de diferencias en normas culturales, valores sociales o marcos de referencia entre los interlocutores."
+      },
+      {
+        id: 12,
+        question: "En un programa de entrenamiento en habilidades sociales basado en Curran, tras exponer instrucciones, modelar la conducta y practicarla mediante role-playing, ¿qué fase corresponde aplicar a continuación?",
+        correct: "Feedback inmediato.",
+        distractors: ["Moldeado y generalización.", "Instrucciones y modelado.", "Ensayo conductual."],
+        explanation: "El orden en el programa de Curran es: 1) Instrucciones y modelado, 2) Ensayo conductual (role-playing), 3) Feedback inmediato, y 4) Moldeado y generalización."
+      },
+      {
+        id: 13,
+        question: "Dentro del ciclo vital de un grupo como entidad viva, ¿en qué etapa se produce la identificación de los roles y la diferenciación de las funciones que desempeña cada miembro?",
+        correct: "Crecimiento.",
+        distractors: ["Nacimiento.", "Maduración.", "Muerte."],
+        explanation: "En la etapa de crecimiento se produce la identificación de roles y se diferencian las funciones que desempeña cada miembro del grupo."
+      },
+      {
+        id: 14,
+        question: "Un adolescente adopta la vestimenta y el vocabulario de una pandilla urbana a la que no pertenece para orientar su comportamiento cuando siente inseguridad. ¿Qué función del grupo de referencia está operando?",
+        correct: "Función normativa.",
+        distractors: ["Función comparativa.", "Función de pertenencia.", "Función de designación externa."],
+        explanation: "La función normativa de un grupo de referencia sirve para guiar, fijar y reforzar conductas, normas y creencias cuando la persona siente inseguridad."
+      },
+      {
+        id: 15,
+        question: "Atendiendo a la clasificación de los grupos según sus objetivos, ¿cómo se denomina aquel grupo cuya meta se centra en analizar su propia marcha, comunicación y relaciones interpersonales internas?",
+        correct: "Grupo de formación.",
+        distractors: ["Grupo de trabajo.", "Grupo de sensibilización.", "Grupo secundario."],
+        explanation: "En los grupos de formación los objetivos se centran en la propia marcha del grupo, analizando los procesos de comunicación y relaciones interpersonales."
+      },
+      {
+        id: 16,
+        question: "En el transcurso de una actividad grupal con tensiones, un integrante anima a sus compañeros, facilita una comunicación fluida y media para alcanzar compromisos compartidos. ¿A qué categoría de roles grupales corresponde su actuación?",
+        correct: "Roles centrados en conservar la cohesión.",
+        distractors: ["Roles centrados en la tarea.", "Roles obstaculizadores.", "Rol de observador."],
+        explanation: "Los roles centrados en conservar la cohesión procuran un clima positivo, buscan soluciones a conflictos, mantienen la comunicación fluida y fomentan el compromiso."
+      },
+      {
+        id: 17,
+        question: "Un equipo educativo mantiene un rendimiento elevado mientras su coordinadora está presente supervisando, pero cae rápidamente en la apatía y la insatisfacción cuando ella se ausenta. ¿Qué estilo de liderazgo produce este patrón?",
+        correct: "Liderazgo autoritario.",
+        distractors: ["Liderazgo permisivo o laissez-faire.", "Liderazgo democrático.", "Liderazgo natural."],
+        explanation: "El liderazgo autoritario suele producir buen rendimiento cuando el líder está presente, pero genera apatía, insatisfacción y baja cohesión en su ausencia."
+      },
+      {
+        id: 18,
+        question: "Al analizar los resultados de un sociograma realizado en un grupo, se observa que un participante ha elegido a varios compañeros en el cuestionario, pero no ha recibido ninguna elección por parte del resto. ¿Qué posición relativa ocupa?",
+        correct: "Marginado.",
+        distractors: ["Aislado.", "Integrado.", "Líder."],
+        explanation: "En un sociograma, el marginado no recibe ninguna elección pero sí realiza elecciones; el aislado no recibe ni realiza ninguna."
+      },
+      {
+        id: 19,
+        question: "Un equipo técnico decide aplicar un sociograma para estudiar la estructura informal de un grupo. ¿Cuál de las siguientes constituye una desventaja inherente a esta técnica?",
+        correct: "Visualiza la situación del individuo sin revelar su causa.",
+        distractors: ["No permite representar rechazos entre los participantes.", "Solo puede aplicarse en grupos primarios de menos de 10 personas.", "Impide conocer el grado de cohesión global del grupo."],
+        explanation: "El sociograma muestra la posición de cada individuo según el criterio de la pregunta formulada, pero no explica la causa de esa situación."
+      },
+      {
+        id: 20,
+        question: "De acuerdo con la teoría de la motivación del logro y del fracaso, ¿qué tipo de metas suelen seleccionar las personas que presentan una motivación de logro baja?",
+        correct: "Cometidos muy fáciles o muy difíciles.",
+        distractors: ["Objetivos ligeramente difíciles pero alcanzables.", "Metas exclusivamente de reconocimiento social.", "Tareas basadas únicamente en recompensas extrínsecas."],
+        explanation: "Quienes tienen baja motivación de logro eligen tareas muy fáciles (éxito asegurado) o muy difíciles (justificación del fracaso), mientras que los de alta motivación eligen retos alcanzables."
+      },
+      {
+        id: 21,
+        question: "La necesidad de pertenencia presenta un doble polo porque los grupos suelen definirse por contraste frente a otros («nosotros-ellos»). ¿Cuál es el principio fundamental para resolver los conflictos de convivencia nacidos de estas dicotomías?",
+        correct: "Buscar lo común para variar la percepción social.",
+        distractors: ["Reforzar las fronteras y normas internas del grupo.", "Aplicar la exclusión temporal de los miembros discrepantes.", "Evitar la formación de cualquier grupo de pertenencia."],
+        explanation: "La resolución de conflictos originados en dicotomías grupales parte de buscar elementos comunes y variar la percepción social."
+      },
+      {
+        id: 22,
+        question: "La cohesión grupal depende de la interacción entre factores internos y externos. ¿Cuál de los siguientes elementos se clasifica como un factor externo de cohesión?",
+        correct: "El estilo más o menos democrático del líder formal.",
+        distractors: ["La atracción interpersonal entre los miembros.", "Tener unos objetivos comunes compartidos.", "La creación de unos valores o cultura grupal propia."],
+        explanation: "El estilo del animador o líder formal, la relación con el entorno y la dependencia de una entidad más amplia son factores externos de cohesión."
+      },
+      {
+        id: 23,
+        question: "En un equipo multidisciplinar, una técnica interviene de manera constante en cada punto de la reunión buscando admiración, lo que termina anulando y desmotivando a sus compañeros. ¿Qué rol en el equipo de trabajo está asumiendo?",
+        correct: "Rol del profesional que busca reconocimiento.",
+        distractors: ["Rol del profesional de «ataque».", "Rol del profesional de «todo es opinable».", "Rol del profesional pasivo."],
+        explanation: "Quien adopta el rol de búsqueda de reconocimiento participa constantemente de forma no siempre positiva, anulando a otros y generando el efecto contrario al deseado."
+      },
+      {
+        id: 24,
+        question: "Durante una reunión de equipo, un miembro toma la palabra repetidamente sin aportar información útil para la tarea, con la única finalidad de dejar constancia de su presencia («hablo, luego existo»). ¿Qué forma de participación inadecuada ejerce?",
+        correct: "Comunicación de existencia.",
+        distractors: ["Comunicación de oposición.", "Escucha permanente sin respuesta.", "Estructura de poder muy jerarquizada."],
+        explanation: "La comunicación de existencia busca únicamente evidenciar la presencia propia en el grupo sin aportar valor a la tarea profesional."
+      },
+      {
+        id: 25,
+        question: "Según el planteamiento de Ana Cano sobre las técnicas grupales aplicadas en una situación de grupo, ¿cuál es el doble objetivo concreto que persiguen?",
+        correct: "Productividad y gratificación grupal.",
+        distractors: ["Control institucional y evaluación individual.", "Competición sana y rendimiento técnico.", "Desinhibición inicial y liderazgo formal."],
+        explanation: "Las técnicas grupales buscan lograr productividad grupal (alcanzar metas eficazmente) y gratificación grupal (facilitar y estimular la acción del conjunto de personas)."
+      },
+      {
+        id: 26,
+        question: "Un animador aplica una técnica muy rompedora en una institución tradicional sin valorar las costumbres del entorno, provocando un rechazo generalizado y un resultado opuesto al objetivo buscado. ¿Cómo denomina el temario a este fenómeno?",
+        correct: "Efecto boomerang.",
+        distractors: ["Efecto halo.", "Resistencia a la madurez.", "Flaqueza del querer."],
+        explanation: "El «efecto boomerang» se produce al usar técnicas inadecuadas al contexto externo que acaban provocando el efecto contrario al perseguido."
+      },
+      {
+        id: 27,
+        question: "Para que un animador realice una buena observación de los procesos grupales durante una sesión, debe seguir unas reglas específicas. ¿Cuál de las siguientes pautas es correcta?",
+        correct: "Centrar la observación en el nivel relacional más que en el contenido.",
+        distractors: ["Implicarse personalmente para experimentar las emociones del grupo.", "Priorizar el contenido temático sobre las interacciones relacionales.", "Realizar interpretaciones rápidas basadas en la intuición personal."],
+        explanation: "Una buena observación grupal se centra en el nivel relacional más que en el contenido, evita implicarse personalmente, huye de interpretaciones apresuradas y muestra empatía."
+      },
+      {
+        id: 28,
+        question: "Dentro de las técnicas de cohesión grupal, aquellas destinadas a explicitar, impulsar y reforzar roles, liderazgos y redes de funcionamiento y comunicación se orientan a:",
+        correct: "El afianzamiento grupal.",
+        distractors: ["La construcción grupal.", "La proyección grupal.", "La iniciación grupal."],
+        explanation: "El afianzamiento grupal refuerza roles, liderazgos y redes de funcionamiento y comunicación; la construcción refuerza valores e ideologías, y la proyección ubica al grupo en su contexto social."
+      },
+      {
+        id: 29,
+        question: "Un equipo profesional convoca una sesión dirigida por un experto psicosocial donde no importa el contenido temático tratado, sino analizar la vida interna y sensibilizar sobre los conflictos relacionales del grupo. ¿Qué tipo de reunión es?",
+        correct: "Reunión centrada sobre el grupo.",
+        distractors: ["Reunión para llegar a un acuerdo.", "Reunión de significación.", "Reunión para intercambiar experiencias."],
+        explanation: "Las reuniones centradas sobre el grupo analizan el funcionamiento interno y las relaciones interpersonales mediante técnicas de dinámica de grupos."
+      },
+      {
+        id: 30,
+        question: "Al preparar el entorno físico de una reunión con ocho asistentes, el coordinador elige un salón de actos enorme donde los participantes quedan muy dispersos, reduciéndose la comunicación. ¿Qué situación extrema se ha generado?",
+        correct: "Sensación de «grano de arena en el desierto».",
+        distractors: ["Sensación de «sardinas en lata».", "Efecto boomerang espacial.", "Disgregación por hacinamiento."],
+        explanation: "Un local excesivamente grande genera la sensación de «grano de arena en el desierto», reduciendo la comunicación y la participación."
+      },
+      {
+        id: 31,
+        question: "En un centro escolar se celebran numerosas reuniones donde se aprueban propuestas ambiciosas, pero posteriormente nadie las lleva a la práctica por falta de voluntad real. ¿Cómo denomina el temario a esta deficiencia tradicional de las reuniones?",
+        correct: "Flaqueza del querer.",
+        distractors: ["Fetichismo metodológico.", "Efecto boomerang.", "Escucha permanente."],
+        explanation: "La «flaqueza del querer» describe la falta de voluntad real para llevar a la práctica los acuerdos tomados en una reunión."
+      },
+      {
+        id: 32,
+        question: "Durante una reunión formal, la falta de tiempo impide abordar el cuarto punto del orden del día. ¿Cómo debe reflejar este hecho el secretario al redactar el acta de la reunión?",
+        correct: "Mantener su espacio indicando que no se abordó y los motivos.",
+        distractors: ["Eliminarlo del orden del día del acta para evitar confusiones.", "Incluirlo dentro del apartado de ruegos y preguntas.", "Redactar una conclusión provisional sin consultarlo al grupo."],
+        explanation: "El acta debe respetar escrupulosamente la numeración del orden del día; si un punto no se trata, se mantiene su espacio indicando que no fue abordado y las razones."
+      },
+      {
+        id: 33,
+        question: "Dentro del ámbito educativo de las dinámicas de grupo, destaca el programa antibullying finlandés KiVa. ¿En qué estrategia grupal basa fundamentalmente su eficacia?",
+        correct: "Conseguir que el grupo apoye a la víctima y comunique el acoso.",
+        distractors: ["Aislar individualmente al acosador fuera del centro escolar.", "Aplicar exclusivamente terapia familiar al alumnado implicado.", "Sustituir las normas de convivencia por sanciones económicas."],
+        explanation: "El programa KiVa busca que los espectadores no apoyen al acosador ni acepten el acoso en silencio, sino que respalden a la víctima y comuniquen la situación."
+      },
+      {
+        id: 34,
+        question: "De acuerdo con Bradford y Fabra, ¿qué característica define específicamente a un grupo de formación (training group) frente a otras técnicas de contenidos temáticos?",
+        correct: "Carece de roles definidos y el experto actúa sin ser directivo.",
+        distractors: ["Tiene una duración breve de seis minutos en grupos de seis personas.", "Requiere un guion cerrado y un moderador altamente directivo.", "Se centra en estudiar casos escritos de la vida real universitaria."],
+        explanation: "El grupo de formación es un grupo reducido y relativamente desestructurado sin roles definidos, donde el experto cataliza los procesos sin ser directivo."
+      },
+      {
+        id: 35,
+        question: "Un gabinete de orientación dispone de pocos minutos para recoger los puntos de vista de todos los alumnos de una clase de 24 estudiantes sobre un conflicto de aula y favorecer una participación democrática. ¿Qué técnica resulta idónea?",
+        correct: "Phillips 66.",
+        distractors: ["Método del caso.", "Grupo de formación.", "La telaraña."],
+        explanation: "Phillips 66 divide grupos numerosos (más de 20 personas) en subgrupos de 6 personas que debaten durante 6 minutos para lograr participación activa en poco tiempo."
+      },
+      {
+        id: 36,
+        question: "Al concluir la dramatización en la técnica de juego de roles (role-playing), se abre la quinta fase de debate. ¿Quiénes deben intervenir en primer lugar para iniciar el análisis?",
+        correct: "Los actores, explicando cómo se han sentido y visto.",
+        distractors: ["Los observadores, evaluando los fallos de la representación.", "El coordinador, dictando la solución correcta al conflicto.", "Un portavoz externo ajeno a la dinámica."],
+        explanation: "En la fase de debate del role-playing, primero intervienen los actores expresando cómo se sintieron y se vieron, y después los observadores."
+      },
+      {
+        id: 37,
+        question: "Las técnicas de cierre, como «La palabra» o «El completamiento de frases», permiten evaluar el proceso grupal. ¿Qué característica distintiva suelen compartir estas técnicas al finalizar?",
+        correct: "No se acostumbra a realizar una discusión sobre sus resultados.",
+        distractors: ["Requieren siempre dividirse en subgrupos de seis personas.", "Deben aplicarse únicamente antes de iniciar la primera sesión.", "Exigen que cada participante firme obligatoriamente sus respuestas."],
+        explanation: "Una característica distintiva de las técnicas de cierre es que, por lo general, no se acostumbra a realizar una discusión posterior sobre sus resultados."
+      },
+      {
+        id: 38,
+        question: "En la estructura de aprendizaje cooperativo «Lápices al centro» (Pencils in the centre), tras debatir en grupo la solución durante cinco minutos, el docente indica que ya pueden coger el lápiz. ¿Qué norma rige ese momento?",
+        correct: "Deben escribir su respuesta individualmente sin hablar entre ellos.",
+        distractors: ["Un único portavoz escribe la respuesta mientras el resto dicta.", "Pueden seguir debatiendo en voz alta mientras redactan la ficha.", "Intercambian sus fichas para corregir los errores del compañero."],
+        explanation: "En «Lápices al centro», cuando cogen los lápices tras el debate grupal, pasan a trabajo individual y no pueden hablar entre ellos, solo escribir."
+      },
+      {
+        id: 39,
+        question: "En un aula de Educación Infantil se incorpora la dinámica «Piedra de la paz» del dossier de dinámicas de grupo. ¿Qué función específica cumple la piedra cuando surge un conflicto entre dos menores?",
+        correct: "Otorga el turno de palabra para explicar posturas y buscar solución.",
+        distractors: ["Se entrega como premio al niño que cede primero en la discusión.", "Sirve para marcar el rincón de aislamiento hasta que se calmen.", "Se utiliza para sortear quién tiene la razón en el desacuerdo."],
+        explanation: "Quien sostiene la «Piedra de la paz» tiene el turno de palabra para explicar su punto de vista y cómo se ha sentido; después la pasa al otro compañero para buscar una solución conjunta."
+      },
+      {
+        id: 40,
+        question: "Un docente aplica la dinámica cooperativa «El juego de la NASA», donde primero cada alumno ordena individualmente los objetos para sobrevivir en la Luna y después lo consensúan en equipo. ¿Cuál es su objetivo principal?",
+        correct: "Comprobar que en grupo se logran mejores soluciones que individualmente.",
+        distractors: ["Memorizar los instrumentos científicos usados en misiones espaciales.", "Fomentar la competición individual para obtener la mayor puntuación.", "Evaluar la discriminación táctil y sensorial de objetos cotidianos."],
+        explanation: "El objetivo de «El juego de la NASA» es evidenciar que pensando y consensuando en grupo se obtienen mejores soluciones y mayor puntuación que de forma individual."
+      }
+    ];
+
+    // Estado global del examen
+    const state = {
+      activeQuestions: [], // Preguntas con sus opciones ya mezcladas
+      userAnswers: {},     // Mapa { [questionId]: string | null }
+      isSubmitted: false,  // Indica si el examen ya ha sido corregido
+      activeFilter: 'all', // Filtro activo en revisión: 'all' | 'wrong' | 'correct' | 'blank'
+    };
+
+    const OPTION_LETTERS = ['A', 'B', 'C', 'D'];
+
+    // Referencias al DOM
+    const examContainer = document.getElementById('exam-container');
+    const answeredCountEl = document.getElementById('answered-count');
+    const bottomAnsweredCountEl = document.getElementById('bottom-answered-count');
+    const progressBarEl = document.getElementById('progress-bar');
+    const shuffleToggleEl = document.getElementById('shuffle-toggle');
+    const shuffleNowBtn = document.getElementById('shuffle-now-btn');
+    const headerSubmitBtn = document.getElementById('header-submit-btn');
+    const headerRestartBtn = document.getElementById('header-restart-btn');
+    const bottomSubmitBtn = document.getElementById('bottom-submit-btn');
+    const bottomActionsEl = document.getElementById('bottom-actions');
+    const resultsPanelEl = document.getElementById('results-panel');
+    const resultsRestartBtn = document.getElementById('results-restart-btn');
+    const emptyFilterMsgEl = document.getElementById('empty-filter-msg');
+
+    // Referencias al modal de confirmación
+    const confirmModalEl = document.getElementById('confirm-modal');
+    const modalDescriptionEl = document.getElementById('modal-description');
+    const modalCancelBtn = document.getElementById('modal-cancel-btn');
+    const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+
+    /**
+     * Baraja una copia de un array usando el algoritmo de Fisher-Yates.
+     * @param {Array} array
+     * @returns {Array}
+     */
+    function shuffleArray(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    /**
+     * Formatea un número con 2 decimales usando coma decimal española.
+     * @param {number} num
+     * @returns {string}
+     */
+    function formatNum(num) {
+      return num.toFixed(2).replace('.', ',');
+    }
+
+    /**
+     * Inicializa o reinicia el examen.
+     * @param {boolean} shuffleQuestions - Si true, baraja también el orden de las preguntas.
+     */
+    function initExam(shuffleQuestions = false) {
+      try {
+        const baseList = shuffleQuestions ? shuffleArray(QUESTIONS_BANK) : [...QUESTIONS_BANK];
+
+        // Mezclamos siempre las 4 opciones para evitar patrones fijos
+        state.activeQuestions = baseList.map((item) => ({
+          ...item,
+          options: shuffleArray([item.correct, ...item.distractors]),
+        }));
+
+        state.userAnswers = {};
+        state.isSubmitted = false;
+        state.activeFilter = 'all';
+
+        // Restablecer visibilidad de secciones
+        resultsPanelEl.classList.add('hidden');
+        emptyFilterMsgEl.classList.add('hidden');
+        bottomActionsEl.classList.remove('hidden');
+        headerSubmitBtn.classList.remove('hidden');
+        headerRestartBtn.classList.add('hidden');
+        shuffleNowBtn.classList.remove('hidden');
+
+        updateProgress();
+        renderQuestions();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error('Error al inicializar el examen:', error);
+      }
+    }
+
+    /**
+     * Calcula cuántas preguntas están contestadas y actualiza los contadores y barra.
+     */
+    function updateProgress() {
+      const answered = Object.values(state.userAnswers).filter((v) => v !== null && v !== undefined).length;
+      const total = state.activeQuestions.length;
+      const percentage = total > 0 ? (answered / total) * 100 : 0;
+
+      answeredCountEl.textContent = answered;
+      bottomAnsweredCountEl.textContent = answered;
+      progressBarEl.style.width = `${percentage}%`;
+    }
+
+    /**
+     * Selecciona o desmarca una opción para una pregunta dada.
+     * Si el usuario pulsa la opción ya marcada, se queda en blanco.
+     * @param {number} questionId
+     * @param {string} optionText
+     */
+    function handleSelectOption(questionId, optionText) {
+      if (state.isSubmitted) return;
+
+      if (state.userAnswers[questionId] === optionText) {
+        delete state.userAnswers[questionId];
+      } else {
+        state.userAnswers[questionId] = optionText;
+      }
+
+      updateProgress();
+      renderQuestions();
+    }
+
+    /**
+     * Deja explícitamente una pregunta en blanco.
+     * @param {number} questionId
+     */
+    function handleClearOption(questionId) {
+      if (state.isSubmitted) return;
+      delete state.userAnswers[questionId];
+      updateProgress();
+      renderQuestions();
+    }
+
+    /**
+     * Determina el estado de una pregunta tras la corrección.
+     * @param {Object} q
+     * @returns {'correct' | 'wrong' | 'blank'}
+     */
+    function getQuestionStatus(q) {
+      const selected = state.userAnswers[q.id];
+      if (!selected) return 'blank';
+      return selected === q.correct ? 'correct' : 'wrong';
+    }
+
+    /**
+     * Renderiza todas las tarjetas de preguntas según el estado actual y filtro activo.
+     */
+    function renderQuestions() {
+      examContainer.innerHTML = '';
+      let visibleCount = 0;
+
+      state.activeQuestions.forEach((q, idx) => {
+        const selected = state.userAnswers[q.id] || null;
+        const status = state.isSubmitted ? getQuestionStatus(q) : null;
+
+        // Aplicar filtro si el examen ya está corregido
+        if (state.isSubmitted && state.activeFilter !== 'all' && status !== state.activeFilter) {
+          return;
+        }
+
+        visibleCount++;
+
+        const card = document.createElement('article');
+        let cardBorderClass = 'border-slate-200';
+        if (state.isSubmitted) {
+          if (status === 'correct') cardBorderClass = 'border-emerald-300 ring-1 ring-emerald-100';
+          else if (status === 'wrong') cardBorderClass = 'border-rose-300 ring-1 ring-rose-100';
+          else cardBorderClass = 'border-slate-300';
+        }
+
+        card.className = `bg-white rounded-2xl border ${cardBorderClass} shadow-sm p-5 sm:p-6 transition`;
+
+        // Cabecera de la pregunta
+        const headerRow = document.createElement('div');
+        headerRow.className = 'flex items-start justify-between gap-3 mb-4';
+
+        const titleWrap = document.createElement('div');
+        titleWrap.className = 'flex items-start gap-3';
+
+        const numBadge = document.createElement('span');
+        numBadge.className = 'inline-flex items-center justify-center w-8 h-8 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm shrink-0 mt-0.5';
+        numBadge.textContent = idx + 1;
+
+        const qText = document.createElement('h3');
+        qText.className = 'text-base sm:text-lg font-semibold text-slate-900 leading-snug';
+        qText.textContent = q.question;
+
+        titleWrap.appendChild(numBadge);
+        titleWrap.appendChild(qText);
+        headerRow.appendChild(titleWrap);
+
+        // Etiqueta de estado (en revisión) o botón "Dejar en blanco" (durante examen)
+        if (state.isSubmitted) {
+          const badge = document.createElement('span');
+          badge.className = 'shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap';
+          if (status === 'correct') {
+            badge.className += ' bg-emerald-100 text-emerald-800';
+            badge.textContent = 'Acertada (+2,50)';
+          } else if (status === 'wrong') {
+            badge.className += ' bg-rose-100 text-rose-800';
+            badge.textContent = 'Fallada (−0,83)';
+          } else {
+            badge.className += ' bg-slate-100 text-slate-600';
+            badge.textContent = 'En blanco (0,00)';
+          }
+          headerRow.appendChild(badge);
+        } else if (selected !== null) {
+          const clearBtn = document.createElement('button');
+          clearBtn.type = 'button';
+          clearBtn.className = 'shrink-0 text-xs font-medium text-slate-500 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition';
+          clearBtn.textContent = 'Dejar en blanco';
+          clearBtn.addEventListener('click', () => handleClearOption(q.id));
+          headerRow.appendChild(clearBtn);
+        }
+
+        card.appendChild(headerRow);
+
+        // Lista de 4 opciones
+        const optionsList = document.createElement('div');
+        optionsList.className = 'space-y-2.5';
+
+        q.options.forEach((optText, optIndex) => {
+          const isSelected = selected === optText;
+          const isCorrectOption = optText === q.correct;
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.disabled = state.isSubmitted;
+
+          let btnClasses =
+            'w-full text-left p-3.5 sm:p-4 rounded-xl border transition flex items-start gap-3 ';
+
+          if (!state.isSubmitted) {
+            if (isSelected) {
+              btnClasses += 'border-indigo-500 bg-indigo-50/80 text-indigo-950 ring-2 ring-indigo-200 cursor-pointer';
+            } else {
+              btnClasses += 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-slate-50 text-slate-700 cursor-pointer';
+            }
+          } else {
+            // Modo revisión
+            if (isCorrectOption) {
+              btnClasses += 'border-emerald-500 bg-emerald-50 text-emerald-950 font-medium';
+            } else if (isSelected && !isCorrectOption) {
+              btnClasses += 'border-rose-500 bg-rose-50 text-rose-950 font-medium';
+            } else {
+              btnClasses += 'border-slate-200 bg-slate-50/50 text-slate-500 opacity-80';
+            }
+          }
+
+          btn.className = btnClasses;
+
+          // Letra A, B, C, D
+          const letterSpan = document.createElement('span');
+          let letterClass = 'inline-flex items-center justify-center w-6 h-6 rounded-lg text-xs font-bold shrink-0 mt-0.5 ';
+          if (!state.isSubmitted) {
+            letterClass += isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600';
+          } else if (isCorrectOption) {
+            letterClass += 'bg-emerald-600 text-white';
+          } else if (isSelected && !isCorrectOption) {
+            letterClass += 'bg-rose-600 text-white';
+          } else {
+            letterClass += 'bg-slate-200 text-slate-500';
+          }
+          letterSpan.className = letterClass;
+          letterSpan.textContent = OPTION_LETTERS[optIndex];
+
+          const textSpan = document.createElement('span');
+          textSpan.className = 'text-sm sm:text-base leading-snug flex-1';
+          textSpan.textContent = optText;
+
+          btn.appendChild(letterSpan);
+          btn.appendChild(textSpan);
+
+          // Icono indicador en modo revisión
+          if (state.isSubmitted) {
+            if (isCorrectOption) {
+              const icon = document.createElement('span');
+              icon.className = 'text-emerald-700 text-xs font-bold shrink-0 self-center';
+              icon.textContent = isSelected ? '✓ Tu respuesta' : '✓ Correcta';
+              btn.appendChild(icon);
+            } else if (isSelected && !isCorrectOption) {
+              const icon = document.createElement('span');
+              icon.className = 'text-rose-700 text-xs font-bold shrink-0 self-center';
+              icon.textContent = '✕ Tu respuesta';
+              btn.appendChild(icon);
+            }
+          }
+
+          if (!state.isSubmitted) {
+            btn.addEventListener('click', () => handleSelectOption(q.id, optText));
+          }
+
+          optionsList.appendChild(btn);
+        });
+
+        card.appendChild(optionsList);
+
+        // Bloque de explicación (visible solo al corregir)
+        if (state.isSubmitted) {
+          const expBox = document.createElement('div');
+          expBox.className = 'mt-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed';
+          expBox.innerHTML = `<span class="font-bold text-slate-900">Explicación:</span> ${q.explanation}`;
+          card.appendChild(expBox);
+        }
+
+        examContainer.appendChild(card);
+      });
+
+      // Mostrar aviso si el filtro seleccionado no tiene preguntas
+      if (state.isSubmitted && visibleCount === 0) {
+        emptyFilterMsgEl.classList.remove('hidden');
+      } else {
+        emptyFilterMsgEl.classList.add('hidden');
+      }
+    }
+
+    /**
+     * Comprueba si hay preguntas en blanco antes de corregir.
+     * Si las hay, abre el modal de confirmación personalizado.
+     */
+    function requestSubmitExam() {
+      if (state.isSubmitted) return;
+
+      const total = state.activeQuestions.length;
+      const answered = Object.values(state.userAnswers).filter((v) => v !== null && v !== undefined).length;
+      const unanswered = total - answered;
+
+      if (unanswered > 0) {
+        modalDescriptionEl.innerHTML =
+          `Tienes <strong>${unanswered}</strong> ${unanswered === 1 ? 'pregunta sin responder' : 'preguntas sin responder'}. Recuerda que las preguntas en blanco no suman ni restan puntos. ¿Deseas finalizar y corregir el examen ahora?`;
+        confirmModalEl.classList.remove('hidden');
+      } else {
+        gradeExam();
+      }
+    }
+
+    /**
+     * Cierra el modal de confirmación.
+     */
+    function closeModal() {
+      confirmModalEl.classList.add('hidden');
+    }
+
+    /**
+     * Evalúa el examen aplicando el baremo exacto:
+     * - 40 preguntas, máximo 100 puntos (2,5 puntos por acierto).
+     * - Cada 3 errores restan 1 acierto (1/3 de acierto por error).
+     * - aciertosNetos = aciertos - (errores / 3)
+     * - puntuacionSobre100 = Math.max(0, (aciertosNetos / 40) * 100)
+     */
+    function gradeExam() {
+      closeModal();
+      state.isSubmitted = true;
+
+      let aciertos = 0;
+      let errores = 0;
+      let enBlanco = 0;
+
+      state.activeQuestions.forEach((q) => {
+        const status = getQuestionStatus(q);
+        if (status === 'correct') aciertos++;
+        else if (status === 'wrong') errores++;
+        else enBlanco++;
+      });
+
+      const penalizacionAciertos = errores / 3;
+      const penalizacionPuntos = penalizacionAciertos * 2.5;
+      const aciertosNetos = aciertos - penalizacionAciertos;
+      const puntuacionSobre100 = Math.max(0, (aciertosNetos / 40) * 100);
+      const notaSobre10 = puntuacionSobre100 / 10;
+      const aprobado = puntuacionSobre100 >= 50;
+
+      // Actualizar panel de resultados
+      document.getElementById('score-100').textContent = formatNum(puntuacionSobre100);
+      document.getElementById('score-10').textContent = formatNum(notaSobre10);
+      document.getElementById('stat-correct').textContent = aciertos;
+      document.getElementById('stat-correct-pts').textContent = `+${formatNum(aciertos * 2.5)} pts`;
+      document.getElementById('stat-wrong').textContent = errores;
+      document.getElementById('stat-blank').textContent = enBlanco;
+      document.getElementById('stat-penalty-pts').textContent = `−${formatNum(penalizacionPuntos)} pts`;
+      document.getElementById('stat-penalty-net').textContent = `${formatNum(penalizacionAciertos)} aciertos restados`;
+
+      // Estado Aprobado / Suspenso
+      const statusBadgeEl = document.getElementById('status-badge');
+      const resultMsgEl = document.getElementById('result-message');
+      if (aprobado) {
+        statusBadgeEl.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800';
+        statusBadgeEl.textContent = '✓ Aprobado';
+        resultMsgEl.textContent = '¡Enhorabuena! Has superado el umbral mínimo de 50 puntos.';
+      } else {
+        statusBadgeEl.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-100 text-rose-800';
+        statusBadgeEl.textContent = '✕ Suspenso';
+        resultMsgEl.textContent = 'No has alcanzado los 50 puntos mínimos. Revisa las explicaciones de las preguntas falladas e inténtalo de nuevo.';
+      }
+
+      document.getElementById('formula-detail').innerHTML =
+        `Aciertos netos: <strong>${formatNum(aciertosNetos)}</strong> (${aciertos} − ${errores}/3) · Baremo: (${formatNum(aciertosNetos)} / 40) × 100 = <strong>${formatNum(puntuacionSobre100)} pts</strong>.`;
+
+      // Contadores de filtros
+      document.getElementById('count-all').textContent = state.activeQuestions.length;
+      document.getElementById('count-wrong').textContent = errores;
+      document.getElementById('count-correct').textContent = aciertos;
+      document.getElementById('count-blank').textContent = enBlanco;
+
+      // Mostrar/ocultar controles
+      resultsPanelEl.classList.remove('hidden');
+      bottomActionsEl.classList.add('hidden');
+      headerSubmitBtn.classList.add('hidden');
+      headerRestartBtn.classList.remove('hidden');
+      shuffleNowBtn.classList.add('hidden');
+
+      state.activeFilter = 'all';
+      updateFilterButtonsUI();
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Actualiza los estilos visuales de los botones de filtro en modo revisión.
+     */
+    function updateFilterButtonsUI() {
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach((btn) => {
+        const isActive = btn.dataset.filter === state.activeFilter;
+        if (isActive) {
+          btn.className = 'filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm';
+        } else {
+          btn.className = 'filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-slate-100 hover:bg-slate-200 text-slate-700';
+        }
+      });
+    }
+
+    // Eventos de botones principales
+    headerSubmitBtn.addEventListener('click', requestSubmitExam);
+    bottomSubmitBtn.addEventListener('click', requestSubmitExam);
+
+    headerRestartBtn.addEventListener('click', () => initExam(shuffleToggleEl.checked));
+    resultsRestartBtn.addEventListener('click', () => initExam(shuffleToggleEl.checked));
+    shuffleNowBtn.addEventListener('click', () => initExam(true));
+
+    // Eventos de filtros
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.activeFilter = btn.dataset.filter;
+        updateFilterButtonsUI();
+        renderQuestions();
+      });
+    });
+
+    // Eventos del modal personalizado
+    modalCancelBtn.addEventListener('click', closeModal);
+    modalConfirmBtn.addEventListener('click', gradeExam);
+    confirmModalEl.addEventListener('click', (e) => {
+      if (e.target === confirmModalEl) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !confirmModalEl.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+
+    // Arranque inicial del examen (mantiene orden 1-40 al abrir, con opciones mezcladas)
+    initExam(false);
+  </script>
+</body>
+</html>
